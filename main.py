@@ -16,7 +16,27 @@ tabnames = [auxleds, common, profiletab]
 WidgetDict = Dict[Any, List[str]]
 
 
+def initiate_exception_logging():
+    import sys
+    from loguru import logger
+    logger.start(sys.stdout, colorize=True, format="<green>{time}</green> <level>{message}</level>")
+    # generating our hook
+    # Back up the reference to the exceptionhook
+    sys._excepthook = sys.excepthook
+
+    def my_exception_hook(exctype, value, traceback):
+        # Print the error and traceback
+        logger.exception(f"{exctype}, {value}, {traceback}")
+        # Call the normal Exception hook after
+        sys._excepthook(exctype, value, traceback)
+        #sys.exit(1)
+
+    # Set the exception hook to our wrapping function
+    sys.excepthook = my_exception_hook
+
+
 # from PyQt5.QtGui import QIcon
+
 
 
 class EffectTreeItem(QtWidgets.QTreeWidgetItem):
@@ -756,6 +776,7 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
 
 def main():
+    initiate_exception_logging()
     app = QtWidgets.QApplication(sys.argv)  # Новый экземпляр QApplication
     window = ProfileEditor()  # Создаём объект класса ExampleApp
     window.show()  # Показываем окно
