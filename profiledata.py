@@ -3,11 +3,11 @@ import json
 
 default_profile = {'AfterWake': {},
                    'PowerOn': {'Blade': {'Speed': 144}},
-                   'WorkingMode': {'Color': [0, 99, 18], 'Flaming': 0, 'FlickeringAlways': 1},
+                   'WorkingMode': {'Color': [0, 255, 0], 'Flaming': 0, 'FlickeringAlways': 1},
                    'PowerOff': {'Blade': {'Speed': 144, 'MoveForward': 0}},
                    'Flaming': {'Size': {'Min': 2, 'Max': 9}, 'Speed': {'Min': 12, 'Max': 27},
                                'Delay_ms': {'Min': 54, 'Max': 180},
-                               'Colors': [[180, 0, 0], [144, 144, 0], [153, 90, 0], [153, 45, 0]]},
+                               'Colors': []},
                    'Flickering': {'Time': {'Min': 90, 'Max': 360}, 'Brightness': {'Min': 50, 'Max': 100}},
                    'Blaster': {'Color': 'random', 'Duration_ms': 720, 'SizePix': 7},
                    'Clash': {'Color': [255, 0, 0], 'Duration_ms': 720, 'SizePix': 11},
@@ -16,13 +16,14 @@ default_profile = {'AfterWake': {},
                                           'Brightness': {'Min': 50, 'Max': 100}},
                               'Flashes': {'Period': {'Min': 15, 'Max': 25}, 'Color': [255, 0, 0], 'Duration_ms': 50,
                                           'SizePix': 7}},
-                   'Blade2':
-                       {'WorkingMode': {'Color': [231, 231, 231]},
+                   'Blade2': {
+                       'IndicateBlasterClashLockup': 1, 'DelayBeforeOn': 200,
+                       'WorkingMode': {'Color': [0, 255, 0]},
                         'Flaming': {'AlwaysOn': 1, 'Size': {'Min': 2, 'Max': 9}, 'Speed': {'Min': 12, 'Max': 27},
                                     'Delay_ms': {'Min': 54, 'Max': 180},
-                                    'Colors': [[180, 0, 0], [144, 144, 0], [153, 90, 0], [153, 45, 0]]},
+                                    'Colors': []},
                         'Flickering': {'AlwaysOn': 1, 'Time': {'Min': 90, 'Max': 360},
-                                       'Brightness': {'Min': 50, 'Max': 100}}, 'DelayBeforeOn': 5}}
+                                       'Brightness': {'Min': 50, 'Max': 100}}}}
 
 
 class Profiles:
@@ -45,7 +46,7 @@ class Profiles:
         """
         self.data[name] = {'AfterWake': {},
                            'PowerOn': {'Blade': {'Speed': 144}},
-                           'WorkingMode': {'Color': [0, 99, 18], 'Flaming': 0, 'FlickeringAlways': 1},
+                           'WorkingMode': {'Color': [0, 0, 255], 'Flaming': 0, 'FlickeringAlways': 1},
                            'PowerOff': {'Blade': {'Speed': 144, 'MoveForward': 0}},
                            'Flaming': {'Size': {'Min': 2, 'Max': 9}, 'Speed': {'Min': 12, 'Max': 27},
                                        'Delay_ms': {'Min': 54, 'Max': 180},
@@ -58,7 +59,17 @@ class Profiles:
                                                   'Brightness': {'Min': 50, 'Max': 100}},
                                       'Flashes': {'Period': {'Min': 15, 'Max': 25}, 'Color': [255, 0, 0],
                                                   'Duration_ms': 50,
-                                                  'SizePix': 7}}}
+                                                  'SizePix': 7}},
+                           'Blade2':{
+                               'IndicateBlasterClashLockup': 1, 'DelayBeforeOn': 200,
+                               'WorkingMode': {'Color': [0, 0, 255]},
+                                'Flaming': {'AlwaysOn': 1, 'Size': {'Min': 2, 'Max': 9},
+                                            'Speed': {'Min': 12, 'Max': 27},
+                                            'Delay_ms': {'Min': 54, 'Max': 180},
+                                            'Colors': []},
+                                'Flickering': {'AlwaysOn': 1, 'Time': {'Min': 90, 'Max': 360},
+                                               'Brightness': {'Min': 50, 'Max': 100}}}
+        }
 
     def delete_profile(self, name: str):
         """
