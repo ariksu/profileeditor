@@ -1,0 +1,95 @@
+{"LedGroups": [
+{"Name": "Crystal", "Leds": [1,2,3]},
+{"Name": "HILT", "Leds": [4,5,6]}
+],
+
+"Sequencers": [
+         {
+"Name": 2222,
+"Group": "Crystal",
+"Sequence": [
+{"Smooth": 50, "Brightness": ["Copyred", "CopyGreen", "Copyblue"]}
+]
+},
+{
+"Name": "Steady",
+"Group": "Hilt",
+"Sequence": [
+{"Name": "Step1", "Brightness": [100, 0, 0], "Wait": 500},
+{"Name": "Step2", "Brightness": [0, 100, 0], "Wait": 500},
+                        {"Name": "Step3", "Brightness": [0, 0, 100], "Wait": 500},
+                        {"Repeat": {"StartingFrom": "Step1", "Count": "forever"} }
+]
+},
+
+{
+"Name": "PowerOnHilt",
+"Group": "hilt",
+"Sequence": [
+{"Name": "Step1", "Brightness": [100, 0, 0], "Wait": 100},
+{"Name": "Step2", "Brightness": [0, 100, 0], "Wait": 100},
+                        {"Name": "Step3", "Brightness": [0, 0, 100], "Wait": 100},
+                        {"Name": "Step1", "Brightness": [100, 0, 0], "Wait": 100},
+{"Name": "Step2", "Brightness": [0, 100, 0], "Wait": 100},
+                        {"Name": "Step3", "Brightness": [0, 0, 100], "Wait": 100},
+{"Name": "Step1", "Brightness": [100, 0, 0], "Wait": 100},
+{"Name": "Step2", "Brightness": [0, 100, 0], "Wait": 100},
+                        {"Name": "Step3", "Brightness": [0, 0, 100], "Wait": 100}
+]
+},
+{
+"Name": "ClashBlasterStab",
+"Group": "crystal",
+"Sequence": [
+                        {"Name": "Step2", "Brightness": [100, 100, 100], "Wait": 50}
+]
+},
+        {
+"Name": "WorkingCrystal",
+"Group": "crystal",
+"Sequence": [
+{"Name": "Step1", "Brightness": ["Copyred", "CopyGreen", "Copyblue"], "Wait": 100},
+                        {"Repeat": {"StartingFrom": "Step1", "Count": "forever"} }
+]
+},
+        {
+"Name": "WorkingHilt",
+"Group": "hilt",
+"Sequence": [
+{"Name": "56Step1", "Brightness": [100, 0, 100], "Wait": 150},
+{"Name": "Step2", "Brightness": [0, 10, 0], "Wait": 150},
+                        {"Repeat": {"StartingFrom": "56Step1", "Count": "forever"} }
+]
+},
+        {
+"Name": "PowerOffCrystal",
+"Group": "crystal",
+"Sequence": [
+{"Smooth": 150, "Brightness": [0, 0, 0]},
+                        {"Name": "Step1", "Brightness": [0, 0, 0], "Wait": 999750}
+]
+},
+        {
+"Name": "PowerOffHilt",
+"Group": "Hilt",
+"Sequence": [
+                        {"Name": "Step1", "Brightness": [0, 0, 100], "Wait": 100},
+{"Name": "Step2", "Brightness": [0, 100, 0], "Wait": 100},
+                        {"Name": "Step3", "Brightness": [100, 0, 0], "Wait": 100},
+                        {"Name": "Step1", "Brightness": [0, 0, 100], "Wait": 100},
+{"Name": "Step2", "Brightness": [0, 100, 0], "Wait": 100},
+                        {"Name": "Step3", "Brightness": [100, 0, 0], "Wait": 100},
+                        {"Name": "Step1", "Brightness": [0, 0, 100], "Wait": 100},
+{"Name": "Step2", "Brightness": [0, 100, 0], "Wait": 100},
+                        {"Name": "Step3", "Brightness": [100, 0, 0], "Wait": 100}
+]
+},
+ {
+"Name": "lockup",
+"Group": "Crystal",
+"Sequence": [
+{"Name": "Step1", "Brightness": ["CopyRed", "CopyGreen", "CopyBlue"], "Wait": 1000},
+            {"Repeat": {"StartingFrom": "Step1", "Count": "forever"} }
+]
+}
+]}
