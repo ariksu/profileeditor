@@ -29,14 +29,14 @@ def prepare_text_for_json(text: str) -> str:
 #     with open('correct.json','w') as o:
 #             o.write(prepare_text_for_json(f.read()))
 
-from quicktype import welcome_from_dict, w
-
+from quicktype import welcome_from_dict
 with open('correct.json') as j:
     x = welcome_from_dict(json.load(j))
     from pprint import pprint
 
     # set breakpoint on pprint below to view loaded object in debugger
     pprint(x)
+
 
 with open("incorrect.json") as j2:
     try:

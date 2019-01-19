@@ -1,0 +1,154 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/AuxEffects",
+    "definitions": {
+        "AuxEffects": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "LedGroups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/LEDGroup"
+                    }
+                },
+                "Sequencers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Sequencer"
+                    }
+                }
+            },
+            "required": [
+                "LedGroups",
+                "Sequencers"
+            ],
+            "title": "AuxEffects"
+        },
+        "LEDGroup": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "Leds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "required": [
+                "Leds",
+                "Name"
+            ],
+            "title": "LEDGroup"
+        },
+        "Sequencer": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "Group": {
+                    "type": "string"
+                },
+                "Sequence": {
+                    "type": "array",
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/Step"
+                            },
+                            {
+                                "$ref": "#/definitions/Repeater"
+                            }
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "Group",
+                "Name",
+                "Sequence"
+            ],
+            "title": "Sequencer"
+        },
+        "Step": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Smooth": {
+                    "type": "integer"
+                },
+                "Brightness": {
+                    "type": "array",
+                    "maxItems": 3,
+                    "minItems": 3,
+                    "items": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    }
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Wait": {
+                    "type": "integer"
+                }
+            },
+            "required": ["Brightness"],
+            "title": "Step"
+        },
+        "Repeater": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Repeat": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "StartingFrom": {
+                            "type": "string"
+                        },
+                        "Count": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "Count",
+                        "StartingFrom"
+                    ],
+                    "title": "Repeat"
+                }
+            },
+            "required": [],
+            "title": "Repeater"
+        },
+        "Repeat": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "StartingFrom": {
+                    "type": "string"
+                },
+                "Count": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Count",
+                "StartingFrom"
+            ],
+            "title": "Repeat"
+        }
+    }
+}
