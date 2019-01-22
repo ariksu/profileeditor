@@ -46,9 +46,25 @@ def union(fs: List[Callable[[Any], T]]) -> Callable[[Any], T]:
     return functools.partial(_from_union, fs)
 
 
-# def optional(fs: List[Callable[[Any],T]]):
-#     params = fs.append(from_none)
-#     return union(params)
+def optional(f: Callable[[Any],T]):
+    params = list()
+    params.append(f)
+    params.append(from_none)
+    return union(params)
+
+
+def zeroable(f: Callable[[Any],T]):
+    params = list()
+    params.append(f)
+    params.append(zero)
+    return union(params)
+
+
+def stringable(f: Callable[[Any],T]):
+    params = list()
+    params.append(f)
+    params.append(empty_string)
+    return union(params)
 
 
 def from_none(x: Any) -> None:
@@ -61,7 +77,7 @@ def zero(x: Any) -> int:
     return 0
 
 
-def empty(x: Any) -> str:
+def empty_string(x: Any) -> str:
     return ""
 
 
@@ -111,31 +127,29 @@ class Repeater:
 
 @dataclass
 class Step:
-    Brightness: Optional[List[Union[int, str]]]
-    Name: Optional[str]
-    Smooth: Optional[int]
-    Wait: Optional[int]
+    Brightness: List[Union[int, str]]
+    Name: str=""
+    Smooth: int=0
+    Wait: int=0
 
     @staticmethod
     def from_dict(obj: Any) -> 'Step':
         if not isinstance(obj, dict):
             raise ValueError(f"{obj} is not a dict")
-        if "Repeat" in obj:
-            raise ValueError(f"{obj} is a Repeater")
-        brightness = \
-            union([from_list(union([from_int, from_str, zero])), from_none])(obj.get("Brightness"))
-        name = union([from_str, empty])(obj.get("Name"))
-        smooth = union([from_int, zero])(obj.get("Smooth"))
-        wait = union([from_int, zero])(obj.get("Wait"))
+        # if "Repeat" in obj:
+        #     raise ValueError(f"{obj} is a Repeater")
+        brightness = from_list(zeroable(union([from_int, from_str])))(obj.get("Brightness"))
+        name = stringable(from_str)(obj.get("Name"))
+        smooth = zeroable(from_int)(obj.get("Smooth"))
+        wait = zeroable(from_int)(obj.get("Wait"))
         return Step(brightness, name, smooth, wait)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["Brightness"] = union(
-            [from_list(union([from_int, from_str])), from_none])(self.Brightness)
-        result["Name"] = union([from_str])(self.Name)
-        result["Smooth"] = union([from_int, from_none])(self.Smooth)
-        result["Wait"] = union([from_int, from_none])(self.Wait)
+        result["Brightness"] = from_list(zeroable(union([from_int, from_str])))(self.Brightness)
+        result["Name"] = stringable(from_str)(self.Name)
+        result["Smooth"] = zeroable(from_int)(self.Smooth)
+        result["Wait"] = zeroable(from_int)(self.Wait)
         return result
 
 
