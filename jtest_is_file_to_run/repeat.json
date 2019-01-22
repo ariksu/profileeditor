@@ -1,0 +1,14 @@
+{
+"Sequencers": [
+
+{
+"Name": "Steady",
+"Group": "Hilt",
+"Sequence": [
+{"Name": "Step1", "Brightness": [100, 0, 0], "Wait": 500},
+{"Name": "Step2", "Brightness": [0, 100, 0], "Wait": 500},
+                        {"Name": "Step3", "Brightness": [0, 0, 100], "Wait": 500},
+                        {"Repeat": {"StartingFrom": "Step1", "Count": "forever"} }
+]
+}
+]}

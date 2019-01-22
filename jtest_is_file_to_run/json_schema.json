@@ -58,7 +58,7 @@
                 "Sequence": {
                     "type": "array",
                     "items": {
-                        "anyOf": [
+                        "OneOf": [
                             {
                                 "$ref": "#/definitions/Step"
                             },
