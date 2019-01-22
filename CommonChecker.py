@@ -62,12 +62,12 @@ class CommonChecker:
         :param key: key to check (blade or blade2)
         :return: error and warning messages or empty strings and list of wrong keys
         """
-        wrong_data_keys = []
+        wrong_data_keys = list()
         blade, error = check_existance(data, key)
-        if error:
+        if error or blade is None:
             return error, "", [], []
         warning, wrong_keys = check_keys(blade, self.blade_keys)
-        w = check_number(blade, 'bandnumber', 1, self.max_band)
+        w: str = check_number(blade, 'bandnumber', 1, self.max_band)
         if w:
             wrong_data_keys.append('bandnumber')
             warning += w
@@ -89,14 +89,14 @@ class CommonChecker:
             warning += w
         return "", warning, wrong_data_keys, wrong_keys
 
-    def check_volume(self, data: dict, param: str) -> (str, str, [str], [str]):
+    def check_volume(self, data: dict, param: str) -> Tuple[str, str, List[str], List[str]]:
         """
         checks if folume parameter is correct
         :param data: dict with wolume settings
         :param param: parameter with key
         :return: error message or ""
         """
-        wrong_data_keys = []
+        wrong_data_keys: List[str] = list()
         volume = get_real_key(data, param)
         if not volume:
             return "no settings;\n", "", [], []
@@ -120,7 +120,7 @@ class CommonChecker:
         """
         deadtime, error = check_existance(data, param)
         wrong_data_keys = []
-        if error:
+        if error or deadtime is None:
             return error, "", [], []
         warning, wrong_keys = check_keys(deadtime, self.deadtime_keys)
         for key in self.deadtime_keys:
@@ -130,7 +130,7 @@ class CommonChecker:
             warning += w
         return error, warning, wrong_data_keys, wrong_keys
 
-    def check_top_number(self, data: dict, param: str) -> Tuple[Tuple[str, str], str, List[str], List[str]]:
+    def check_top_number(self, data: dict, param: str) -> Tuple[str, str, List[str], List[str]]:
         """
         checks number value in top level of dict
         :param data: dict with data
@@ -147,7 +147,7 @@ class CommonChecker:
         :return: error and warning or empty strings
         """
         swing, error = check_existance(data, param)
-        if error:
+        if error or swing is None:
             return error, "", [], []
         wrong_data_keys = []
         warning, wrong_keys = check_keys(swing, self.swing_keys)
@@ -178,7 +178,7 @@ class CommonChecker:
         """
         spin, error = check_existance(data, param)
         wrong_data_keys = list()
-        if error:
+        if error or spin is None:
             return error, "", [], []
         warning, wrong_keys = check_keys(spin, self.spin_keys)
         w = check_bool(spin, 'enabled')
@@ -217,7 +217,7 @@ class CommonChecker:
         :return: error and warning messages or empty strings
         """
         clash, error = check_existance(data, param)
-        if error:
+        if error or clash is None:
             return error, "", [], []
         wrong_data_keys = list()
         warning, wrong_keys = check_keys(clash, self.clash_keys)
@@ -247,7 +247,7 @@ class CommonChecker:
         :return: error and warning messages or empty strings
         """
         stab, error = check_existance(data, param)
-        if error:
+        if error or stab is None:
             return error, "", [], []
         warning, wrong_keys = check_keys(stab, self.stab_keys)
         wrong_data_keys = list()
@@ -285,7 +285,7 @@ class CommonChecker:
         :return: error and warning messages or empty strings, list of wrong keys and list of wrong keys with data
         """
         screw, error = check_existance(data, param)
-        if error:
+        if error or screw is None:
             return error, "", [], []
         warning, wrong_keys = check_keys(screw, self.screw_keys)
         wrong_data_key = list()

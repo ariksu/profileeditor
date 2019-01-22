@@ -80,6 +80,8 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.actionSave_As.triggered.connect(self.SaveAsPressed)
         self.actionSave_As.setShortcut('Ctrl+Shift+S')
         self.actionNew.triggered.connect(self.NewPressed)
+        self.actionSave_All.setShortcut('Ctrl+Alt+S')
+        self.actionSave_All.triggered.connect(self.SaveAllPressed)
         self.actionNew.setShortcut('Ctrl+N')
         self.actionOpen.triggered.connect(self.OpenPressed)
         self.actionOpen.setShortcut('Ctrl+O')
@@ -265,6 +267,9 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.CB_list = [self.CBFlickering, self.CBFlaming, self.CBMoveForward]
         self.extra_blade_CB_dict = {self.CBIndicate: Mediator.indicate_path, self.CBFlickeringAlwaysOn:
                                     Mediator.flickering_on_path, self.CBFlamingAlwaysOn: Mediator.flaming_on_path}
+        self.CB_single_dict = {self.CBFlickering: self.CBFlaming, self.CBFlaming: self.CBFlickering,
+                               self.CBFlamingAlwaysOn: self.CBFlickeringAlwaysOn,
+                               self.CBFlickeringAlwaysOn:self.CBFlamingAlwaysOn}
         # reverse of min max dict - map max value to min
         self.max_min_dict = dict([(self.min_max_dict[key], key) for key in self.min_max_dict.keys()])
 
@@ -547,8 +552,16 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         """
         if self.CBGroup.count() > 0:
             self.SequenceControlsEnable()
+            seqs = self.auxdata.get_corresponding_seqs(self.CBGroup.currentText())
+            self.CBSeqList.clear()
+            self.CBSeqList.addItems(seqs)
+            if not seqs:
+                self.BtnCopySeq.setEnabled(False)
+            else:
+                self.BtnCopySeq.setEnabled(True)
         else:
             self.SequenceControlsDisable()
+
 
     def AddSequencer(self):
         """
@@ -608,6 +621,7 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.SpinWait.setEnabled(True)
         self.SpinSmooth.setEnabled(True)
         self.BtnAddStep.setEnabled(True)
+        self.TxtNewName.setEnabled(True)
         # get leds for tis sequencer led group and enable its brightnesses and channels
         current = self.TrStructure.currentItem()
         if isinstance(current, SequencerTreeItem):
@@ -653,6 +667,7 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
             max_step = seq.get_max_step_number()
             self.TxtStepName.setText("Step" + str(max_step+1))
+            self.CBStartrom.clear()
             self.CBStartrom.addItems(seq.get_steps_names())
         else:
             self.TxtStepName.clear()
@@ -688,10 +703,13 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         """
         current = self.TrStructure.currentItem()
         name = Step.get_name(current.text(0))
-        self.TxtStepName.setText(name)
+        self.TxtNewName.setText(name)
         parent = current.parent()
-        id = self.GetItemId(current)
-        brightnesses, wait, smooth = self.auxdata.get_step_info(parent.text(0), id)
+        seq_descr = parent.text(0)
+        seq = self.auxdata.get_seq_by_name(Sequencer.get_name(seq_descr))
+        self.TxtStepName.setText("Step"+str(seq.get_max_step_number()+1))
+        index = self.GetItemId(current)
+        brightnesses, wait, smooth = self.auxdata.get_step_info(parent.text(0), index)
         self.SpinWait.setValue(wait)
         self.SpinSmooth.setValue(smooth)
         leds = self.auxdata.get_led_list(parent.text(0))
@@ -764,20 +782,24 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         current = self.TrStructure.currentItem()
         name = self.TxtStepName.text()
         brightnesses = list()
-        for led in Mediator.leds_list:
-            if self.step_channels_dict[led].isEnabled() and self.step_channels_dict[led].currentIndex() != 0:
-                brightnesses.append(self.step_channels_dict[led].currentText())
-            elif self.step_brightness_dict[led].isEnabled():
-                brightnesses.append(self.step_brightness_dict[led].value())
-        wait = self.SpinWait.value()
-        smooth = self.SpinSmooth.value()
+        # for led in Mediator.leds_list:
+        #     if self.step_channels_dict[led].isEnabled() and self.step_channels_dict[led].currentIndex() != 0:
+        #         brightnesses.append(self.step_channels_dict[led].currentText())
+        #     elif self.step_brightness_dict[led].isEnabled():
+        #         brightnesses.append(self.step_brightness_dict[led].value())
+        # wait = self.SpinWait.value()
+        # smooth = self.SpinSmooth.value()
         if isinstance(current, SequencerTreeItem):
             seq_name = current.text(0)
-            step, error = self.auxdata.create_step(seq_name, -1, name, brightnesses, smooth, wait)
+            for i in range(len(self.auxdata.get_group_by_name(self.auxdata.get_seq_by_name(Sequencer.get_name(seq_name)).Group).Leds)):
+                brightnesses.append(0)
+            step, error = self.auxdata.create_step(seq_name, -1, name, brightnesses, 0, 0)
         else:
             seq_name = current.parent().text(0)
-            id = self.GetItemId(current)
-            step, error = self.auxdata.create_step(seq_name, id, name, brightnesses, smooth, wait)
+            index = self.GetItemId(current)
+            for i in range(len(self.auxdata.get_group_by_name(self.auxdata.get_seq_by_name(Sequencer.get_name(seq_name)).Group).Leds)):
+                brightnesses.append(0)
+            step, error = self.auxdata.create_step(seq_name, index, name, brightnesses, 0, 0)
         if error:
             self.ErrorMessage(error)
             return
@@ -785,7 +807,7 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         if isinstance(current, SequencerTreeItem):
             current.addChild(step_item)
         else:
-            current.parent().insertChild(id+1, step_item)
+            current.parent().insertChild(index+1, step_item)
         self.saved[0] = False
         self.ChangeTabTitle(auxleds, self.tabWidget.currentIndex())
         self.TrStructure.expandItem(current)
@@ -805,7 +827,7 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         """
         current = self.TrStructure.currentItem()
         seq_name = current.parent().text(0)
-        name = self.TxtStepName.text()
+        name = self.TxtNewName.text()
         brightnesses = list()
         for led in Mediator.leds_list:
             if self.step_channels_dict[led].isEnabled() and self.step_channels_dict[led].currentIndex() != 0:
@@ -890,7 +912,6 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
                                          QMessageBox.Yes, QMessageBox.No)
             if reply == QMessageBox.No:
                 return
-        self.saved[0] = False
         self.ChangeTabTitle(auxleds, self.tabWidget.currentIndex())
         if isinstance(current, SequencerTreeItem):
             parent = self.TrStructure.invisibleRootItem()
@@ -907,8 +928,9 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.ClearStepControls()
             self.StepControlsDisable()
             self.RepeatControlDisable()
-            #to do : delete child steps
+
         if isinstance(current, StepTreeItem):
+            index = self.GetItemId(current)
             parent = current.parent()
             seq_name = parent.text(0)
             step_name = Step.get_name(current_name)
@@ -923,38 +945,39 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
             #reload steps for repeat
             used_steps = seq.get_steps_names()
             if not used_steps:
-                self.CBForever.isEnabled(False)
-                self.CBStartrom.isEnabled(False)
-                self.SpinCount.isEnabled(False)
-                self.BtnAddRepeat.isEnabled(False)
+                self.CBForever.setEnabled(False)
+                self.CBStartrom.setEnabled(False)
+                self.SpinCount.setEnabled(False)
+                self.BtnAddRepeat.setEnabled(False)
             else:
                 self.CBStartrom.clear()
                 for step in used_steps:
                     self.CBStartrom.addItem(step)
-            #disable step controls
-            self.ClearStepControls()
-            self.ClearRepeatControls()
-            self.StepControlsDisable()
-            self.RepeatControlDisable()
-            self.BtnEditStep.setEnabled(False)
-            self.BtnEditRepeat.setEnabled(False)
-            self.BtnDeleteRepeat.setEnabled(False)
         if isinstance(current, RepeatTreeItem):
             parent: SequencerTreeItem = current.parent()
             seq_name: str = parent.text(0)
-            id = self.GetItemId(current)
-            error = self.auxdata.delete_repeat(seq_name, id)
+            index = self.GetItemId(current)
+            error = self.auxdata.delete_repeat(seq_name, index)
             if error:
                 self.ErrorMessage(error)
                 return
             parent.removeChild(current)
-            self.ClearStepControls()
-            self.StepControlsDisable()
-            self.RepeatControlDisable()
-            self.ClearRepeatControls()
-            self.BtnEditStep.setEnabled(False)
-            self.BtnEditRepeat.setEnabled(False)
-            self.BtnDeleteRepeat.setEnabled(False)
+        # select next step if any, or previous, or none if there are no steps
+        if not isinstance(current, SequencerTreeItem):
+            if index < parent.childCount():
+                self.TrStructure.setCurrentItem(parent.child(index))
+                self.TreeItemChanged(self.TrStructure.currentItem())
+            elif parent.childCount() > 0:
+                self.TrStructure.setCurrentItem(parent.child(index - 1))
+            else:
+                # disable step controls
+                self.ClearStepControls()
+                self.ClearRepeatControls()
+                self.StepControlsDisable()
+                self.RepeatControlDisable()
+                self.BtnEditStep.setEnabled(False)
+                self.BtnEditRepeat.setEnabled(False)
+                self.BtnDeleteRepeat.setEnabled(False)
         # data is unsaved now
         self.saved[0] = False
         self.ChangeTabTitle(auxleds, self.tabWidget.currentIndex())
@@ -1151,8 +1174,9 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         :return:
         """
         effects = self.profiledata.get_profiles_list()
-        valid = [ch.isalpha() or ch.isdigit() or ch == '_' for ch in name]
-        enabled = True if name and name not in effects and all(valid) else False
+        has_symbol = any([ch.isalpha() for ch in name])
+        valid = all(ch.isalpha() or ch.isdigit() or ch == "_" for ch in name)
+        enabled = True if name and name not in effects and valid and has_symbol else False
         self.BtnProfile.setEnabled(enabled)
         self.BtnEditProfile.setEnabled(enabled)
 
@@ -1181,8 +1205,12 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
             profile = self.LstProfile.currentItem().text()
             if CB.isChecked():
                 self.profiledata.update_value(key_list, profile, 1)
+                # disable coupled checkbox
+                self.CB_single_dict[CB].setEnabled(False)
             else:
                 self.profiledata.update_value(key_list, profile, 0)
+                # enable coupled checkbox
+                self.CB_single_dict[CB].setEnabled(True)
             # data now is unsaved
             if self.saved[2]:
                 self.saved[2] = False
@@ -1263,7 +1291,9 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.BtnUp.setEnabled(enabled)
         enabled = True if (i < self.LstProfile.count() - 1) else False
         self.BtnDown.setEnabled(enabled)
-        if self.TxtAddProfile.text() != "" and self.TxtAddProfile.text() not in self.profiledata.get_profiles_list():
+        has_symbol = any([s.isalpha() for s in self.TxtAddProfile.text()])
+        valid = all(s.isalpha() or s.isdigit() or s == "_" for s in self.TxtAddProfile.text())
+        if valid and has_symbol and self.TxtAddProfile.text() != "" and self.TxtAddProfile.text() not in self.profiledata.get_profiles_list():
             self.BtnEditProfile.setEnabled(True)
 
     def DeleteProfile(self):
@@ -1569,8 +1599,12 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         profile = self.LstProfile.currentItem().text()
         if CB.isChecked():
             value = 1
+            #disable coupled checkbox
+            self.CB_single_dict[CB].setEnabled(False)
         else:
             value = 0
+            #enable coupled checkbox
+            self.CB_single_dict[CB].setEnabled(True)
         #data is unsaved now
         self.profiledata.update_value(path, profile, value)
         self.saved[2] = False
@@ -1596,16 +1630,27 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         profile = self.LstProfile.currentItem().text()
         auxeffect = self.TxtCreateAux.text()
         valid = [ch.isalpha() or ch.isdigit() or ch == '_' for ch in auxeffect]
-        existing = self.profiledata.get_aux_effects(effect, profile)
-        if auxeffect != "" and all(valid) and auxeffect not in existing:
+        existing = [seq.lower() for seq in self.profiledata.get_aux_effects(effect, profile)]
+        if auxeffect != "" and all(valid) and auxeffect.lower() not in existing:
             self.LstAuxProfile.addItem(auxeffect)
             self.TxtCreateAux.clear()
             self.profiledata.save_aux(auxeffect, effect, profile)
         else:
             auxeffect = self.CBAuxList.currentText()
-            if auxeffect and auxeffect not in existing:
+            groups_used = list()
+            for sequencer in existing:
+                seq = self.auxdata.get_seq_by_name(sequencer)
+                if seq:
+                    groups_used.append(seq.Group)
+            group_selected = self.auxdata.get_seq_by_name(auxeffect).Group
+            if group_selected.lower() in groups_used:
+                self.ErrorMessage("Effect for this LED group already added")
+                return
+            if auxeffect and auxeffect.lower() not in existing:
                 self.LstAuxProfile.addItem(auxeffect)
                 self.profiledata.save_aux(auxeffect, effect, profile)
+            else:
+                self.ErrorMessage("Effect does not exiss or is already used")
 
     def AuxClicked(self):
         """
@@ -1762,6 +1807,16 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def SaveAsPressed(self):
         self.Save(True)
+
+    def SaveAllPressed(self):
+        """
+        saves files from all three tabs
+        :return:
+        """
+        for i in range(3):
+            self.tabWidget.setCurrentIndex(i)
+            self.Save(False)
+        self.tabWidget.setCurrentIndex(0)
 
     def OpenPressed(self):
         index = self.tabWidget.currentIndex()

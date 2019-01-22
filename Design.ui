@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1124</width>
-    <height>756</height>
+    <width>1154</width>
+    <height>780</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="TabAuxLEDs">
        <attribute name="title">
@@ -35,530 +35,6 @@
          <widget class="QLabel" name="LBLWith">
           <property name="text">
            <string>with LED</string>
-          </property>
-         </widget>
-        </item>
-        <item row="11" column="1" colspan="12">
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>Edit Step</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_22">
-           <item row="3" column="7">
-            <widget class="QSpinBox" name="SpinSmooth">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>9999</number>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="7">
-            <widget class="QPushButton" name="BtnEditStep">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Save Step</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="3">
-            <widget class="QLabel" name="LblLED7">
-             <property name="text">
-              <string>LED7:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="7">
-            <widget class="QSpinBox" name="SpinWait">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>9999</number>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="4">
-            <widget class="QSpinBox" name="SpinBrightness6">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="3">
-            <widget class="QLabel" name="LblLED8">
-             <property name="text">
-              <string>LED8:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="6">
-            <widget class="QLabel" name="LblWait">
-             <property name="text">
-              <string>Wait:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="5">
-            <widget class="QComboBox" name="CBChannel6">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>None</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyRed</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyGreen</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyBlue</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="2" column="3">
-            <widget class="QLabel" name="LblLED6">
-             <property name="text">
-              <string>LED6:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="6">
-            <widget class="QLabel" name="LblNewName">
-             <property name="text">
-              <string>New name:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="4">
-            <widget class="QSpinBox" name="SpinBrightness7">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QSpinBox" name="SpinBrightness3">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="LblLED3">
-             <property name="text">
-              <string>LED3:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="LblLED4">
-             <property name="text">
-              <string>LED4:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QSpinBox" name="SpinBrightness4">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="4">
-            <widget class="QSpinBox" name="SpinBrightness8">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="LblChannel">
-             <property name="text">
-              <string>Copy Channel:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="LblBrightness">
-             <property name="text">
-              <string>Led Brightness:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="6">
-            <widget class="QLabel" name="LblSmooth">
-             <property name="text">
-              <string>Smooth:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QComboBox" name="CBChannel2">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>None</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyRed</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyGreen</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyBlue</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="1" column="4">
-            <widget class="QSpinBox" name="SpinBrightness5">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QComboBox" name="CBChannel1">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>None</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyRed</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyGreen</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CobyBlue</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="3" column="5">
-            <widget class="QComboBox" name="CBChannel7">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>None</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyRed</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyGreen</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyBlue</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QSpinBox" name="SpinBrightness1">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="5">
-            <widget class="QComboBox" name="CBChannel8">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>None</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyRed</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyGreen</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyBlue</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="0" column="5">
-            <widget class="QLabel" name="LblChannel_2">
-             <property name="text">
-              <string>Copy Channel</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="LblLED">
-             <property name="text">
-              <string>LED:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
-            <widget class="QLabel" name="LblBrightness_2">
-             <property name="text">
-              <string>LED Brightness:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="3">
-            <widget class="QLabel" name="LblLED_2">
-             <property name="text">
-              <string>LED:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QSpinBox" name="SpinBrightness2">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="LblLED1">
-             <property name="text">
-              <string>LED1:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QComboBox" name="CBChannel4">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>None</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyRed</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyGreen</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyBlue</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="LblLED2">
-             <property name="text">
-              <string>LED2:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="3">
-            <widget class="QLabel" name="LblLed5">
-             <property name="text">
-              <string>LED5:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QComboBox" name="CBChannel3">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>None</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyRed</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyGreen</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyBlue</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="1" column="5">
-            <widget class="QComboBox" name="CBChannel5">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>None</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyRed</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyGreen</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>CopyBlue</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="1" column="7">
-            <widget class="QLineEdit" name="lineEdit">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>90</width>
-               <height>16777215</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="6" column="6" colspan="2">
-         <widget class="QPushButton" name="BtnAddSequencer">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Add Sequencer</string>
-          </property>
-          <property name="autoDefault">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="12">
-         <widget class="QPushButton" name="BtnChange">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Change for all groups</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="10" colspan="2">
-         <widget class="QComboBox" name="CBSecondLED"/>
-        </item>
-        <item row="4" column="6" colspan="3">
-         <widget class="QComboBox" name="CBFirstLED"/>
-        </item>
-        <item row="3" column="5">
-         <widget class="QCheckBox" name="CBLed3">
-          <property name="text">
-           <string>LED3</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <widget class="QCheckBox" name="CBLed1">
-          <property name="text">
-           <string>LED1</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="6">
-         <widget class="QCheckBox" name="CBLed4">
-          <property name="text">
-           <string>LED4</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="9">
-         <widget class="QCheckBox" name="CBLed6">
-          <property name="text">
-           <string>LED6</string>
           </property>
          </widget>
         </item>
@@ -575,45 +51,60 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
-         <widget class="QLabel" name="LBLLedsList">
+        <item row="3" column="6">
+         <widget class="QCheckBox" name="CBLed4">
           <property name="text">
-           <string/>
+           <string>LED4</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="10">
-         <widget class="QCheckBox" name="CBLed7">
+        <item row="6" column="6" colspan="2">
+         <widget class="QPushButton" name="BtnAddSequencer">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
-           <string>LED7</string>
+           <string>Add Sequencer</string>
+          </property>
+          <property name="autoDefault">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
-         <widget class="QLabel" name="LblSeqName">
+        <item row="4" column="6" colspan="3">
+         <widget class="QComboBox" name="CBFirstLED"/>
+        </item>
+        <item row="4" column="12">
+         <widget class="QPushButton" name="BtnChange">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
-           <string>Sequencer name:</string>
+           <string>Change for all groups</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="11">
-         <widget class="QCheckBox" name="CBLed8">
+        <item row="4" column="10" colspan="2">
+         <widget class="QComboBox" name="CBSecondLED"/>
+        </item>
+        <item row="3" column="5">
+         <widget class="QCheckBox" name="CBLed3">
           <property name="text">
-           <string>LED8</string>
+           <string>LED3</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="LblSequencers">
+        <item row="3" column="3">
+         <widget class="QCheckBox" name="CBLed1">
           <property name="text">
-           <string>Sequencers List:</string>
+           <string>LED1</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="QLabel" name="LblLeds">
+        <item row="3" column="9">
+         <widget class="QCheckBox" name="CBLed6">
           <property name="text">
-           <string>LEDs in the group:</string>
+           <string>LED6</string>
           </property>
          </widget>
         </item>
@@ -629,10 +120,81 @@
           </column>
          </widget>
         </item>
-        <item row="3" column="4">
-         <widget class="QCheckBox" name="CBLed2">
+        <item row="3" column="11">
+         <widget class="QCheckBox" name="CBLed8">
           <property name="text">
-           <string>LED2</string>
+           <string>LED8</string>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="0">
+         <widget class="QPushButton" name="BtnDeleteSeq">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Delete Sequencer</string>
+          </property>
+          <property name="autoDefault">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" rowspan="4">
+         <widget class="QListWidget" name="LstGroup"/>
+        </item>
+        <item row="3" column="10">
+         <widget class="QCheckBox" name="CBLed7">
+          <property name="text">
+           <string>LED7</string>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="0">
+         <widget class="QLabel" name="LblAuxStatus">
+          <property name="text">
+           <string>Open File Status:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="7" colspan="2">
+         <widget class="QCheckBox" name="CBLed5">
+          <property name="text">
+           <string>LED5</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="LblGroup">
+          <property name="text">
+           <string>LED Group List:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="10" colspan="2">
+         <widget class="QComboBox" name="CBSeqList">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="12">
+         <widget class="QPushButton" name="BtnCopySeq">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Copy Sequencer</string>
+          </property>
+          <property name="autoDefault">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QLabel" name="LblSeqName">
+          <property name="text">
+           <string>Sequencer name:</string>
           </property>
          </widget>
         </item>
@@ -643,8 +205,19 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0" rowspan="4">
-         <widget class="QListWidget" name="LstGroup"/>
+        <item row="3" column="1">
+         <widget class="QLabel" name="LblLeds">
+          <property name="text">
+           <string>LEDs in the group:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="LblSequencers">
+          <property name="text">
+           <string>Sequencers List:</string>
+          </property>
+         </widget>
         </item>
         <item row="14" column="0" colspan="13">
          <widget class="QTextBrowser" name="TxtAuxStatus">
@@ -662,58 +235,117 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="LblGroup">
+        <item row="3" column="2">
+         <widget class="QLabel" name="LBLLedsList">
           <property name="text">
-           <string>LED Group List:</string>
+           <string/>
           </property>
          </widget>
         </item>
-        <item row="13" column="0">
-         <widget class="QLabel" name="LblAuxStatus">
+        <item row="3" column="4">
+         <widget class="QCheckBox" name="CBLed2">
           <property name="text">
-           <string>Open File Status:</string>
+           <string>LED2</string>
           </property>
          </widget>
         </item>
-        <item row="12" column="0">
-         <widget class="QPushButton" name="BtnDeleteSeq">
+        <item row="6" column="5">
+         <widget class="QComboBox" name="CBGroup"/>
+        </item>
+        <item row="6" column="3" colspan="2">
+         <widget class="QLineEdit" name="TxtSeqName">
           <property name="enabled">
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Delete Sequencer</string>
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="11">
+         <widget class="QPushButton" name="BtnAddGroup">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Add Group</string>
           </property>
           <property name="autoDefault">
            <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="6" column="10" colspan="2">
-         <widget class="QComboBox" name="CBSeqList">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="7" colspan="2">
-         <widget class="QCheckBox" name="CBLed5">
+        <item row="4" column="1" colspan="5" alignment="Qt::AlignRight">
+         <widget class="QLabel" name="LBLChange">
           <property name="text">
-           <string>LED5</string>
+           <string>Change LED</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="12">
-         <widget class="QPushButton" name="BtnCopySeq">
+        <item row="1" column="12">
+         <widget class="QPushButton" name="BtnUpdate">
           <property name="enabled">
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Copy Sequencer</string>
+           <string>Edit Group Name</string>
           </property>
-          <property name="autoDefault">
-           <bool>true</bool>
+         </widget>
+        </item>
+        <item row="6" column="8" colspan="2">
+         <widget class="QLabel" name="LBLCopy">
+          <property name="text">
+           <string>Or Copy Existing</string>
           </property>
+         </widget>
+        </item>
+        <item row="1" column="3" colspan="8">
+         <widget class="QLineEdit" name="TxtGroup"/>
+        </item>
+        <item row="10" column="1" colspan="12">
+         <widget class="QGroupBox" name="GBStep">
+          <property name="title">
+           <string>Step Creation</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_8">
+           <item row="0" column="1" colspan="5">
+            <widget class="QLineEdit" name="TxtStepName">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Step1</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="7">
+            <widget class="QPushButton" name="BtnDeleteStep">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Delete Step</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="LblStepName">
+             <property name="text">
+              <string>Step Name:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="6">
+            <widget class="QPushButton" name="BtnAddStep">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Add Step</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item row="12" column="1" colspan="12">
@@ -742,23 +374,13 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0" alignment="Qt::AlignRight">
-            <widget class="QLabel" name="LblStartFrom">
+           <item row="1" column="2" alignment="Qt::AlignHCenter">
+            <widget class="QLabel" name="LblCount">
              <property name="text">
-              <string>Start From:</string>
+              <string>Count:</string>
              </property>
-            </widget>
-           </item>
-           <item row="1" column="8">
-            <widget class="QPushButton" name="BtnDeleteRepeat">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Delete Repeat</string>
-             </property>
-             <property name="autoDefault">
-              <bool>true</bool>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -779,16 +401,6 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2" alignment="Qt::AlignHCenter">
-            <widget class="QLabel" name="LblCount">
-             <property name="text">
-              <string>Count:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="9">
             <widget class="QPushButton" name="BtnEditRepeat">
              <property name="enabled">
@@ -802,106 +414,494 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="0" alignment="Qt::AlignRight">
+            <widget class="QLabel" name="LblStartFrom">
+             <property name="text">
+              <string>Start From:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="8">
+            <widget class="QPushButton" name="BtnDeleteRepeat">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Delete Repeat</string>
+             </property>
+             <property name="autoDefault">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
-        <item row="6" column="8" colspan="2">
-         <widget class="QLabel" name="LBLCopy">
-          <property name="text">
-           <string>Or Copy Existing</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="5">
-         <widget class="QComboBox" name="CBGroup"/>
-        </item>
-        <item row="6" column="3" colspan="2">
-         <widget class="QLineEdit" name="TxtSeqName">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="10" column="1" colspan="12">
-         <widget class="QGroupBox" name="GBStep">
+        <item row="11" column="1" colspan="12">
+         <widget class="QGroupBox" name="groupBox">
           <property name="title">
-           <string>Step Creation</string>
+           <string>Edit Step</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_8">
-           <item row="0" column="0">
-            <widget class="QLabel" name="LblStepName">
+          <layout class="QGridLayout" name="gridLayout_22">
+           <item row="5" column="3">
+            <widget class="QLabel" name="LblLED8">
              <property name="text">
-              <string>Step Name:</string>
+              <string>LED8:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="4">
+            <widget class="QSpinBox" name="SpinBrightness6">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="4">
+            <widget class="QSpinBox" name="SpinBrightness7">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QSpinBox" name="SpinBrightness3">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="LblLED3">
+             <property name="text">
+              <string>LED3:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="LblLED4">
+             <property name="text">
+              <string>LED4:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="3">
+            <widget class="QLabel" name="LblLED7">
+             <property name="text">
+              <string>LED7:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="5">
+            <widget class="QComboBox" name="CBChannel6">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyBlue</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="3" column="3">
+            <widget class="QLabel" name="LblLED6">
+             <property name="text">
+              <string>LED6:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="5">
+            <widget class="QComboBox" name="CBChannel8">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyBlue</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QLabel" name="LblBrightness_2">
+             <property name="text">
+              <string>LED Brightness:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QComboBox" name="CBChannel2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyBlue</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QSpinBox" name="SpinBrightness1">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QSpinBox" name="SpinBrightness2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="5">
+            <widget class="QComboBox" name="CBChannel7">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyBlue</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="LblLED1">
+             <property name="text">
+              <string>LED1:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="5">
+            <widget class="QComboBox" name="CBChannel5">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyBlue</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="4">
+            <widget class="QSpinBox" name="SpinBrightness5">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QComboBox" name="CBChannel4">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyBlue</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLabel" name="LblChannel">
+             <property name="text">
+              <string>Copy Channel:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="LblBrightness">
+             <property name="text">
+              <string>Led Brightness:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="4">
+            <widget class="QSpinBox" name="SpinBrightness8">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="LblLED2">
+             <property name="text">
+              <string>LED2:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QComboBox" name="CBChannel3">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyBlue</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QSpinBox" name="SpinBrightness4">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QComboBox" name="CBChannel1">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CopyGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CobyBlue</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="5">
+            <widget class="QLabel" name="LblChannel_2">
+             <property name="text">
+              <string>Copy Channel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QLabel" name="LblLed5">
+             <property name="text">
+              <string>LED5:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="LblLED">
+             <property name="text">
+              <string>LED:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QLabel" name="LblLED_2">
+             <property name="text">
+              <string>LED:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="LblNewName">
+             <property name="text">
+              <string>New name:</string>
              </property>
             </widget>
            </item>
            <item row="0" column="7">
-            <widget class="QPushButton" name="BtnDeleteStep">
+            <widget class="QPushButton" name="BtnEditStep">
              <property name="enabled">
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>Delete Step</string>
+              <string>Save Step</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="6">
-            <widget class="QPushButton" name="BtnAddStep">
+           <item row="5" column="7">
+            <widget class="QSpinBox" name="SpinSmooth">
              <property name="enabled">
               <bool>false</bool>
              </property>
-             <property name="text">
-              <string>Add Step</string>
+             <property name="maximum">
+              <number>9999</number>
              </property>
             </widget>
            </item>
            <item row="0" column="1" colspan="5">
-            <widget class="QLineEdit" name="TxtStepName">
+            <widget class="QLineEdit" name="TxtNewName">
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>1000</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="7">
+            <widget class="QLabel" name="LblWait">
              <property name="text">
-              <string>Step1</string>
+              <string>Wait:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="7">
+            <widget class="QSpinBox" name="SpinWait">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>9999</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="7">
+            <widget class="QLabel" name="LblSmooth">
+             <property name="text">
+              <string>Smooth:</string>
              </property>
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item row="1" column="3" colspan="8">
-         <widget class="QLineEdit" name="TxtGroup"/>
-        </item>
-        <item row="1" column="11">
-         <widget class="QPushButton" name="BtnAddGroup">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Add Group</string>
-          </property>
-          <property name="autoDefault">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="12">
-         <widget class="QPushButton" name="BtnUpdate">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Edit Group Name</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1" colspan="5" alignment="Qt::AlignRight">
-         <widget class="QLabel" name="LBLChange">
-          <property name="text">
-           <string>Change LED</string>
-          </property>
          </widget>
         </item>
        </layout>
@@ -1751,13 +1751,13 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>87</height>
+            <height>80</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>50</height>
+            <height>80</height>
            </size>
           </property>
          </widget>
@@ -1785,7 +1785,7 @@
            <bool>true</bool>
           </property>
           <property name="currentIndex">
-           <number>4</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="TabAfterWake">
            <attribute name="title">
@@ -2407,13 +2407,13 @@
               </property>
              </spacer>
             </item>
-            <item row="0" column="0">
+            <item row="0" column="0" colspan="5">
              <widget class="QCheckBox" name="CBFlickeringAlwaysOn">
               <property name="enabled">
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>AlwaysOn</string>
+               <string>AlwaysOn (only for Blade2, see Working Mode for Blade1)</string>
               </property>
              </widget>
             </item>
@@ -3370,7 +3370,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1124</width>
+     <width>1154</width>
      <height>26</height>
     </rect>
    </property>
@@ -3384,6 +3384,7 @@
     <addaction name="actionOpenAll"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_As"/>
+    <addaction name="actionSave_All"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -3450,6 +3451,11 @@
     <string>Open All...</string>
    </property>
   </action>
+  <action name="actionSave_All">
+   <property name="text">
+    <string>Save All</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>TxtGroup</tabstop>
@@ -3461,18 +3467,51 @@
   <tabstop>CBLed6</tabstop>
   <tabstop>CBLed7</tabstop>
   <tabstop>CBLed8</tabstop>
+  <tabstop>BtnAddGroup</tabstop>
   <tabstop>LstGroup</tabstop>
+  <tabstop>BtnUpdate</tabstop>
   <tabstop>BtnDeleteGroup</tabstop>
+  <tabstop>CBFirstLED</tabstop>
+  <tabstop>CBSecondLED</tabstop>
+  <tabstop>BtnChange</tabstop>
   <tabstop>TxtSeqName</tabstop>
+  <tabstop>CBGroup</tabstop>
+  <tabstop>BtnAddSequencer</tabstop>
+  <tabstop>CBSeqList</tabstop>
+  <tabstop>BtnCopySeq</tabstop>
   <tabstop>TrStructure</tabstop>
   <tabstop>TxtStepName</tabstop>
+  <tabstop>BtnAddStep</tabstop>
   <tabstop>BtnDeleteStep</tabstop>
+  <tabstop>TxtNewName</tabstop>
+  <tabstop>SpinBrightness1</tabstop>
+  <tabstop>CBChannel1</tabstop>
+  <tabstop>SpinBrightness2</tabstop>
+  <tabstop>CBChannel2</tabstop>
+  <tabstop>SpinBrightness3</tabstop>
+  <tabstop>CBChannel3</tabstop>
+  <tabstop>SpinBrightness4</tabstop>
+  <tabstop>CBChannel4</tabstop>
+  <tabstop>SpinBrightness5</tabstop>
+  <tabstop>CBChannel5</tabstop>
+  <tabstop>SpinBrightness6</tabstop>
+  <tabstop>CBChannel6</tabstop>
+  <tabstop>SpinBrightness7</tabstop>
+  <tabstop>CBChannel7</tabstop>
+  <tabstop>SpinBrightness8</tabstop>
+  <tabstop>CBChannel8</tabstop>
+  <tabstop>SpinWait</tabstop>
+  <tabstop>SpinSmooth</tabstop>
+  <tabstop>BtnEditStep</tabstop>
   <tabstop>CBStartrom</tabstop>
   <tabstop>SpinCount</tabstop>
   <tabstop>CBForever</tabstop>
   <tabstop>BtnAddRepeat</tabstop>
   <tabstop>BtnDeleteRepeat</tabstop>
+  <tabstop>BtnEditRepeat</tabstop>
+  <tabstop>BtnDeleteSeq</tabstop>
   <tabstop>TxtAuxStatus</tabstop>
+  <tabstop>tabWidget</tabstop>
   <tabstop>SpinBand</tabstop>
   <tabstop>SpinPixPerBand</tabstop>
   <tabstop>SpinStartFlash</tabstop>
@@ -3515,8 +3554,11 @@
   <tabstop>TxtCommonStatus</tabstop>
   <tabstop>TxtAddProfile</tabstop>
   <tabstop>BtnProfile</tabstop>
-  <tabstop>LstProfile</tabstop>
+  <tabstop>BtnEditProfile</tabstop>
   <tabstop>BtnDeleteProfile</tabstop>
+  <tabstop>BtnDown</tabstop>
+  <tabstop>BtnUp</tabstop>
+  <tabstop>LstProfile</tabstop>
   <tabstop>CBBlade</tabstop>
   <tabstop>CBIndicate</tabstop>
   <tabstop>SpinDelayBeforeOn</tabstop>
@@ -3524,37 +3566,53 @@
   <tabstop>SpinBladeSpeedOn</tabstop>
   <tabstop>TxtWorkingColor</tabstop>
   <tabstop>BtnWorkingColor</tabstop>
+  <tabstop>WorkingColor</tabstop>
+  <tabstop>CBFlaming</tabstop>
+  <tabstop>CBFlickering</tabstop>
   <tabstop>SpinPowerOffSpeed</tabstop>
   <tabstop>CBMoveForward</tabstop>
-  <tabstop>CBFlamingAlwaysOn</tabstop>
   <tabstop>SpinFlamingSizeMin</tabstop>
   <tabstop>SpinFlamingSizeMax</tabstop>
   <tabstop>SpinFlamingSpeedMin</tabstop>
   <tabstop>SpinFlamingSpeedMax</tabstop>
   <tabstop>SpinFlamingDelayMin</tabstop>
   <tabstop>SpinFlamingDelayMax</tabstop>
+  <tabstop>BtnAddColor</tabstop>
   <tabstop>LstFlamingColor</tabstop>
   <tabstop>BtnDeleteColor</tabstop>
-  <tabstop>BtnAddColor</tabstop>
-  <tabstop>CBFlickeringAlwaysOn</tabstop>
+  <tabstop>CBFlamingAlwaysOn</tabstop>
   <tabstop>SpinFlickeringTimeMin</tabstop>
   <tabstop>SpinFlickeringTimeMax</tabstop>
   <tabstop>SpinFlickeringBrMin</tabstop>
   <tabstop>SpinFlickeringBrMax</tabstop>
+  <tabstop>CBFlickeringAlwaysOn</tabstop>
   <tabstop>TxtBlasterColor</tabstop>
   <tabstop>BtnBlasterColor</tabstop>
   <tabstop>SpinBlasterDuration</tabstop>
   <tabstop>SpinBlasterSizePix</tabstop>
+  <tabstop>BlasterColor</tabstop>
   <tabstop>TxtClashColor</tabstop>
   <tabstop>BtnClashColor</tabstop>
   <tabstop>SpinClashDuration</tabstop>
   <tabstop>SpinClashSizePix</tabstop>
+  <tabstop>ClashColor</tabstop>
   <tabstop>TxtStabColor</tabstop>
   <tabstop>BtnStabColor</tabstop>
   <tabstop>SpinStabDuration</tabstop>
   <tabstop>SpinStabSizePix</tabstop>
+  <tabstop>StabColor</tabstop>
+  <tabstop>TxtLockupFlickerColor</tabstop>
+  <tabstop>BtnLockupFlickerColor</tabstop>
+  <tabstop>LockupFlickerColor</tabstop>
+  <tabstop>SpinLockupTimeMin</tabstop>
+  <tabstop>SpinLockupTimeMax</tabstop>
   <tabstop>SpinLockupBrightnessMin</tabstop>
   <tabstop>SpinLockupBrightnessMax</tabstop>
+  <tabstop>TxtLockupFlashesColor</tabstop>
+  <tabstop>BtnLockupFlashesColor</tabstop>
+  <tabstop>LockupFlashesColor</tabstop>
+  <tabstop>SpinLockupPeriodMin</tabstop>
+  <tabstop>SpinLockupPeriodMax</tabstop>
   <tabstop>SpinLockupDuration</tabstop>
   <tabstop>SpinLockupSizepix</tabstop>
   <tabstop>CBAuxList</tabstop>

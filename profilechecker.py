@@ -24,7 +24,7 @@ class ProfileChecker:
                   'Blade2': blade2_keys}
     blade2_connection = {'Flaming': blade2_flaming_keys, 'Flickering': blade2_flickering_keys, 'WorkingMode': 'Color'}
 
-    def get_key(self, data: dict, key: str):
+    def get_key(self, data: Dict[str, Any], key: str):
         """
         gets case insensitive key
         :param key: key to find
@@ -36,7 +36,7 @@ class ProfileChecker:
                 return new_key
         return ""
 
-    def check_auxleds(self, data: dict) -> str:
+    def check_auxleds(self, data: Dict[str, Any]) -> str:
         """
         checks if auxledeffect string is correct
         :param data: dict with settings data
@@ -48,39 +48,43 @@ class ProfileChecker:
                 return "auxleds effect must be formatted as [Effect1, Effect2];\n"
         return ""
 
-    def check_afterwake(self, data: dict) -> (str, str):
+    def check_afterwake(self, data: Dict[str, Any]) -> Tuple[str, str]:
         """
         function chacks afterwake effect and returns error message or empty string
         :param data: dict with effect settings
         :return: error and warning messages or empty strings
         """
         afterwake, error = check_existance(data, 'afterwake')
-        if error:
+        if error or afterwake is None:
             return error, ""
         warning = self.check_auxleds(afterwake)
-        error += check_keys(afterwake, ['auxleds'])
+        e, wrong_keys = check_keys(afterwake, ['auxleds'])
+        error += e
         return error, warning
 
-    def check_poweron(self, data: dict) -> (str, str):
+    def check_poweron(self, data: Dict[str, Any]) -> Tuple[str, str]:
         """
         checks poweron effect
         :param data: data wit effect settings
         :return: error and warning message or ""
         """
         poweron, error = check_existance(data, 'poweron')
-        if error:
+        if error or poweron is None :
             return error, ''
         warning = self.check_auxleds(poweron)
-        error += check_keys(poweron, self.on_off_keys)
+        e, wrong_keys= check_keys(poweron, self.on_off_keys)
+        error+=e
         blade, error_blade = check_existance(poweron, 'blade')
         if blade:
-            error_blade += check_number(blade, "speed", 0, self.big_number)
-            error_blade += check_keys(blade, ['speed'])
+            error+= check_number(blade, "speed", 0, self.big_number)
+            e, w_k = check_keys(blade, ['speed'])
+            error_blade += e
+            wrong_keys.extend(w_k)
         if error_blade:
             error += "Blade: " + error_blade
         return error, warning
 
-    def check_workingmode(self, data: dict) -> (str, str):
+    def check_workingmode(self, data: Dict[str, Any]) -> Tuple[str, str]:
         """
         checks if working mode settings are correct (all parameters exist and are of correct type and meaning,
         flaming effect exists if used
@@ -89,36 +93,37 @@ class ProfileChecker:
         :return: error and warning messages (or empty strings)
         """
         workingmode, error = check_existance(data, 'workingmode')
-        if error:
+        if error or workingmode is None:
             return error, ""
-        error += check_keys(workingmode, self.workingmode_keys)
+        error, wrong_keys = check_keys(workingmode, self.workingmode_keys)
         error += check_color(workingmode)
         error += check_bool(workingmode, 'flaming')
         error += check_bool(workingmode, 'flickeringalways')
         warning = self.check_auxleds(workingmode)
         return error, warning
 
-    def check_poweroff(self, data: dict) -> (str, str):
+    def check_poweroff(self, data: Dict[str, Any]) -> Tuple[str, str]:
         """
         check poweroff settings (if setting for blade (speed, direction) and auxeffect are present and correct
         :param data: dict with poweroff settings
         :return: error and warning message or empty strings
         """
         poweroff, error = check_existance(data, 'poweroff')
-        if error:
+        if error or poweroff is None:
             return error, ""
-        error += check_keys(poweroff, self.on_off_keys)
+        error, wrong_keys = check_keys(poweroff, self.on_off_keys)
         blade, error_blade = check_existance(poweroff, 'blade')
         if blade:
             error_blade += check_number(blade, 'speed', 0, self.big_number)
             error_blade += check_bool(blade, 'moveforward')
-            error_blade += check_keys(blade, ['speed', 'moveforward'])
+            e, wrong_keys = check_keys(blade, ['speed', 'moveforward'])
+            error_blade += e
         warning = self.check_auxleds(poweroff)
         if error_blade:
             error += 'Blade: ' + error_blade
         return error, warning
 
-    def check_flaming(self, data: dict, keylist: list, led_number: int) -> (str, str):
+    def check_flaming(self, data: Dict[str, Any], keylist: List[str], led_number: int) -> Tuple[str, str]:
         """
         checks if flaming settings are correct
         :param data: dict with flaming settings
@@ -127,9 +132,9 @@ class ProfileChecker:
         :return: error and warning messages or empty strings
         """
         flaming, error = check_existance(data, 'flaming')
-        if error:
+        if error or flaming is None:
             return error, ""
-        error = check_keys(flaming, keylist)
+        error, wrong_keys = check_keys(flaming, keylist)
         error += check_min_max_parameter(flaming, "size", 0, led_number)
         error += check_min_max_parameter(flaming, "speed", 0, self.big_number)
         error += check_min_max_parameter(flaming, "delay_ms", 0, self.big_number)
@@ -137,7 +142,7 @@ class ProfileChecker:
         warning = self.check_auxleds(flaming)
         return error, warning
 
-    def check_flickering(self, data: dict, keylist: list) -> (str, list):
+    def check_flickering(self, data: Dict[str, Any], keylist: List[str]) -> Tuple[str, str]:
         """
         checks if flickering settings are cortect
         :param data: dict with flickering setting
@@ -145,15 +150,15 @@ class ProfileChecker:
         :return: error and warning message or empty strings
         """
         flickering, error = check_existance(data, 'flickering')
-        if error:
+        if error or flickering is None:
             return error, ""
-        error += check_keys(flickering, keylist)
+        error, wrong_keys = check_keys(flickering, keylist)
         error += check_min_max_parameter(flickering, "time", 0, self.big_number)
         error += check_min_max_parameter(flickering, "brightness", 0, 100)
         warning = self.check_auxleds(flickering)
         return error, warning
 
-    def check_movement(self, data: dict, leds_number: int, key: str) -> (str, str):
+    def check_movement(self, data: Dict[Any], leds_number: int, key: str) -> Tuple[str, str]:
         """
         checks if blaster/clash/stab effect is correct
         :param data: dict with settings
@@ -162,23 +167,23 @@ class ProfileChecker:
         :return: error or warning messages or empty strings
         """
         move, error = check_existance(data, key.lower())
-        if error:
+        if error or move is None:
             return error, ""
-        error += check_keys(move, self.move_keys)
+        error, wrong_keys = check_keys(move, self.move_keys)
         error += check_number(move, "duration_ms", 0, self.big_number)
         error += check_number(move, "sizepix", 0, leds_number)
         error += check_color(move)
         warning = self.check_auxleds(move)
         return error, warning
 
-    def check_flicker(self, data: dict) -> str:
+    def check_flicker(self, data: Dict[str, Any]) -> str:
         """
         checks flicker settings for lockup parameter
         :param data: dict with settings
         :return: error or empty message
         """
         flicker, error = check_existance(data, 'flicker')
-        if error:
+        if error or flicker is None:
             return error
         error, wrong_keys = check_keys(flicker, self.lockup_flicker_keys)
         error += check_color(flicker)
@@ -186,7 +191,7 @@ class ProfileChecker:
         error += check_min_max_parameter(flicker, 'brightness', 0, 100)
         return error
 
-    def check_flashes(self, lockup: dict, leds_number: int) -> str:
+    def check_flashes(self, lockup: Dict[str, Any], leds_number: int) -> str:
         """
         checks flashes settings for lockup parameter
         :param lockup: dict with settings
@@ -194,7 +199,7 @@ class ProfileChecker:
         :return: error or empty message
         """
         flashes, error = check_existance(lockup, 'flashes')
-        if error:
+        if error or flashes is None:
             return error
         error, wrong_keys = check_keys(flashes, self.lockup_flashes_keys)
         error += check_color(flashes)
@@ -203,7 +208,7 @@ class ProfileChecker:
         error += check_number(flashes, 'sizepix', 0, leds_number)
         return error
 
-    def check_lockup(self, data: dict, leds_number: int) -> (str, str):
+    def check_lockup(self, data: Dict[str, Any], leds_number: int) -> Tuple[str, str]:
         """
         checks of lockup effect settins are correct
         :param data: dict with data
@@ -211,9 +216,9 @@ class ProfileChecker:
         :return: error and warning messages or empty strings
         """
         lockup, error = check_existance(data, 'lockup')
-        if error:
+        if error or lockup is None:
             return error, ""
-        error += check_keys(lockup, self.lockup_keys)
+        error, wrong_keys = check_keys(lockup, self.lockup_keys)
         warning = self.check_auxleds(lockup)
         flicker_error = self.check_flicker(lockup)
         if flicker_error:
@@ -223,7 +228,7 @@ class ProfileChecker:
             error += 'Flashes: ' + flashes_error
         return error, warning
 
-    def check_blade2(self, data: dict, leds_number: int) -> (str, str):
+    def check_blade2(self, data: Dict[str, Any], leds_number: int) -> Tuple[str, str]:
         """
         checks if blade2 settings are correct
         :param data: dict with settings of blade2
@@ -257,7 +262,9 @@ class ProfileChecker:
             error += check_number(blade2, "delaybeforeon", 0, self.big_number)
             workingmode, error_workingmode = check_existance(blade2, 'workingmode')
             if workingmode:
-                error_workingmode = check_keys(workingmode, ['color', 'auxledseffect'])
+                error_workingmode, w_k = check_keys(workingmode, ['color', 'auxledseffect'])
+                if w_k:
+                    wrong_keys.extend(w_k)
                 error_workingmode += check_color(workingmode)
                 warning_workingmode = self.check_auxleds(workingmode)
                 if warning_workingmode:

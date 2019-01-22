@@ -19,10 +19,10 @@ List of functions
 -check_color_list(data):                          checks color list, uts existance and correctness of all colors
 -get_value(data, key):                            gets value if it exists or None
 """
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Any, Dict
 
 
-def get_real_key(data: dict, template: str) -> str:
+def get_real_key(data: Dict[str, Any], template: str) -> str:
     """
     gets real dictionary key
     :param data: dictionary with data
@@ -35,14 +35,14 @@ def get_real_key(data: dict, template: str) -> str:
     return ""
 
 
-def check_existance(data: dict, param: str) -> Tuple[Optional[dict], str]:
+def check_existance(data: Dict[str, Any], param: str) -> Tuple[Optional[Dict[str, Any]], str]:
     """
     checks if key exists and its value is a dict
     :param data: dict with settings
     :param param: key
     :return: data or none and error message or empty string
     """
-    key = get_real_key(data, param)
+    key: str = get_real_key(data, param)
     if not key:
         return None, "settings are absent;"
     data = data[key]
@@ -51,7 +51,7 @@ def check_existance(data: dict, param: str) -> Tuple[Optional[dict], str]:
     return data, ""
 
 
-def check_number(data: dict, param: str, min_value: int, max_value: int)-> str:
+def check_number(data: Dict[str, Any], param: str, min_value: int, max_value: int)-> str:
     """
     checks if number parameter is correct
     :param data: data with settings
@@ -60,18 +60,18 @@ def check_number(data: dict, param: str, min_value: int, max_value: int)-> str:
     :param max_value: max parameter value
     :return: error message ot empty
     """
-    error = ""
-    key = get_real_key(data, param)
+    error: str = ""
+    key: str = get_real_key(data, param)
     if not key:
         error = "%s parameter is absent;\n" % param
     else:
-        value = data[key]
+        value: Any = data[key]
         if not isinstance(value, int) or value < min_value or value > max_value:
             return "%s parameter must be number in %i...%i;\n" % (param, min_value, max_value)
     return error
 
 
-def check_unnecessary_number(data: dict, param: str, min_value: int, max_value: int)->str:
+def check_unnecessary_number(data: Dict[str, Any], param: str, min_value: int, max_value: int)->str:
     """
     checks if number parameter is correct (number may be absent)
     :param data: data with settings
@@ -80,16 +80,16 @@ def check_unnecessary_number(data: dict, param: str, min_value: int, max_value: 
     :param max_value: max parameter value
     :return: error message ot empty
     """
-    error = ""
-    key = get_real_key(data, param)
+    error: str = ""
+    key: str = get_real_key(data, param)
     if key:
-        value = data[key]
+        value: Any = data[key]
         if not isinstance(value, int) or value < min_value or value > max_value:
             return "%s parameter must be number in %i...%i;" % (param, min_value, max_value)
     return error
 
 
-def check_number_max_warning(data: dict, param: str, min_value: int, max_value: int) -> Tuple[str, str]:
+def check_number_max_warning(data: Dict[str, Any], param: str, min_value: int, max_value: int) -> Tuple[str, str]:
     """
     checks if number parameter is correct, if number>max you get warning, for other problem - error
     :param data: data with settings
@@ -98,13 +98,13 @@ def check_number_max_warning(data: dict, param: str, min_value: int, max_value: 
     :param max_value: max parameter value
     :return: error and warning message ot empty
     """
-    error = ""
-    warning = ""
-    key = get_real_key(data, param)
+    error: str = ""
+    warning: str = ""
+    key: str = get_real_key(data, param)
     if not key:
         error = "%s parameter is absent;\n" % param
     else:
-        value = data[key]
+        value: Any = data[key]
         if not isinstance(value, int) or value < min_value:
             error += "%s parameter must be number more then %i;\n" % (param, min_value)
         if isinstance(value, int) and value > max_value:
@@ -112,7 +112,7 @@ def check_number_max_warning(data: dict, param: str, min_value: int, max_value: 
     return error, warning
 
 
-def check_number_min_warning(data: dict, param: str, min_value: int, max_value: int) -> Tuple[str, str]:
+def check_number_min_warning(data: Dict[str, Any], param: str, min_value: int, max_value: int) -> Tuple[str, str]:
     """
     checks if number parameter is correct, if number>max you get warning, for other problem - error
     :param data: data with settings
@@ -121,9 +121,9 @@ def check_number_min_warning(data: dict, param: str, min_value: int, max_value: 
     :param max_value: max parameter value
     :return: error and warning message ot empty
     """
-    error = ""
-    warning = ""
-    key = get_real_key(data, param)
+    error: str = ""
+    warning: str = ""
+    key: str = get_real_key(data, param)
     if not key:
         error = "%s parameter is absent;\n" % param
     else:
@@ -135,7 +135,7 @@ def check_number_min_warning(data: dict, param: str, min_value: int, max_value: 
     return error, warning
 
 
-def check_number_warning(data: dict, param: str, min_value: int, max_value: int) -> Tuple[str, str]:
+def check_number_warning(data: Dict[str, Any], param: str, min_value: int, max_value: int) -> Tuple[str, str]:
     """
     checks if number parameter is correct, if number>max or < min you get warning, for other problem - error
     :param data: data with settings
@@ -144,9 +144,9 @@ def check_number_warning(data: dict, param: str, min_value: int, max_value: int)
     :param max_value: max parameter value
     :return: error and warning message ot empty
     """
-    error = ""
-    warning = ""
-    key = get_real_key(data, param)
+    error: str = ""
+    warning: str = ""
+    key: str = get_real_key(data, param)
     if not key:
         error = "%s parameter is absent;\n" % param
     else:
@@ -159,15 +159,15 @@ def check_number_warning(data: dict, param: str, min_value: int, max_value: int)
     return error, warning
 
 
-def check_bool(data, param) -> str:
+def check_bool(data: Dict[str, Any], param: str) -> str:
     """
     checks boolean param (0 or 1)
     :param data: dict with settings
     :param param: key for checking
     :return: error message or empty str
     """
-    error = ""
-    key = get_real_key(data, param)
+    error: str = ""
+    key: str = get_real_key(data, param)
     if not key:
         error = "%s setting is absent;\n" % param
     else:
@@ -177,7 +177,7 @@ def check_bool(data, param) -> str:
     return error
 
 
-def check_min_max_parameter(data: dict, param: str, lower: int, upper: int) -> str:
+def check_min_max_parameter(data: Dict[str, Any], param: str, lower: int, upper: int) -> str:
     """
     checks pair of parameters that set min and max values for param key
     :param data: dict with settings
@@ -186,8 +186,8 @@ def check_min_max_parameter(data: dict, param: str, lower: int, upper: int) -> s
     :param upper: upper border for parameter
     :return:
     """
-    error = ""
-    param_key = get_real_key(data, param)
+    error: str = ""
+    param_key: str = get_real_key(data, param)
     if not param_key:
         return "%s parameter is absent;\n" % param
     if not isinstance(data[param_key], dict):
@@ -195,8 +195,8 @@ def check_min_max_parameter(data: dict, param: str, lower: int, upper: int) -> s
     for key in data[param_key]:
         if key.lower() not in ["min", "max"]:
             error += "unknown parameter %s in %s settings;" % (key, param)
-    min_value = get_real_key(data[param_key], 'min')
-    max_value = get_real_key(data[param_key], 'max')
+    min_value: Any = get_real_key(data[param_key], 'min')
+    max_value: Any = get_real_key(data[param_key], 'max')
     if not min_value or not max_value:
         error += "min and max %s parameters must present;" % param
     else:
@@ -207,14 +207,14 @@ def check_min_max_parameter(data: dict, param: str, lower: int, upper: int) -> s
     return error
 
 
-def check_color(data: dict) -> str:
+def check_color(data: Dict[str, Any]) -> str:
     """
     checks if color is correct (list of three numbers 0...255 or random string)
     :param data: dict with setting
     :return:
     """
-    error = ""
-    color = get_real_key(data, "color")
+    error: str = ""
+    color: str = get_real_key(data, "color")
     if not color:
         return "color settings are absent\n"
     color = data[color]
@@ -231,19 +231,19 @@ def check_color(data: dict) -> str:
     return error
 
 
-def check_color_from_list(data) -> str:
+def check_color_from_list(data: Dict[str, Any]) -> str:
     """
     checks if color is correct (list of three numbers 0...255 or random string)
     :param data: colors settings
     :return:
     """
-    colors = get_real_key(data, 'colors')
+    colors: str = get_real_key(data, 'colors')
     if not colors:
         return "colors settings are absent;\n"
     colors = data[colors]
     if not isinstance(colors, list) or len(colors) == 0:
         return "colors must contain not empty list of colors;\n"
-    error = ""
+    error: str = ""
     for color in colors:
         if isinstance(color, str):
             if color.lower() != 'random':
@@ -258,15 +258,15 @@ def check_color_from_list(data) -> str:
     return error
 
 
-def check_keys(data: dict, key_list: list) -> Tuple[str, List[str]]:
+def check_keys(data: Dict[str, Any], key_list: list) -> Tuple[str, List[str]]:
     """
     checks if all keys are correct
     :param data: dict with settings
     :param key_list: list with keus
     :return: error message ot empty string
     """
-    error = ""
-    wrong_keys = []
+    error: str = ""
+    wrong_keys = list()
     for key in data.keys():
         if key.lower() not in key_list:
             error += "Unknown parameter % s;\n" % key
@@ -274,7 +274,7 @@ def check_keys(data: dict, key_list: list) -> Tuple[str, List[str]]:
     return error, wrong_keys
 
 
-def get_value(data: dict, key: str) -> object:
+def get_value(data: Dict[str, Any], key: str) -> Any:
     """
     checks if key is correct and gets value
     :param data: settings

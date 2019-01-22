@@ -1,11 +1,10 @@
-from typing import Sequence, Tuple, Optional, List
+from typing import Sequence, Tuple, Optional, Any, List, Callable
 import pprint
-import yaml
 import IniToJson
 import profilechecker
 from collections import OrderedDict
 
-default_profile = OrderedDict({'AfterWake': {},
+default_profile: OrderedDict[str, Any] = OrderedDict({'AfterWake': {},
                    'PowerOn': {'Blade': {'Speed': 144}},
                    'WorkingMode': {'Color': [0, 255, 0], 'Flaming': 0, 'FlickeringAlways': 1},
                    'PowerOff': {'Blade': {'Speed': 144, 'MoveForward': 0}},
@@ -90,7 +89,7 @@ class Profiles:
         self.data.pop(name)
         self.order.remove(name)
 
-    def get_default(self, path: Sequence[str]) -> object:
+    def get_default(self, path: List[str]) -> OrderedDict[str, Any]:
         """
         gets default value for key path
         :param path: pat of keys
@@ -101,7 +100,7 @@ class Profiles:
             data = data[key]
         return data
 
-    def get_value(self, path: Sequence[str], profile: str) -> object:
+    def get_value(self, path: List[str], profile: str) -> OrderedDict[str, Any]:
         """
         gets value of field configured with pat for profile
         :param path: path of keys
@@ -113,7 +112,7 @@ class Profiles:
             data = data[key]
         return data
 
-    def update_value(self, path: Sequence[str], profile: str, value: object):
+    def update_value(self, path: List[str], profile: str, value: object):
         """
         updates field for given keys in given profile, makes in given value
         :param path: key path
@@ -145,7 +144,7 @@ class Profiles:
         except (IndexError, TypeError, ValueError):
             print("wrong keypath or color data")  # to do logging
 
-    def get_colors(self, path: Sequence[str], profile: str) -> Optional[Sequence[str]]:
+    def get_colors(self, path: List[str], profile: str) -> Optional[List[str]]:
         """
         gets colors list for profile and path
         :param path: list of keys
@@ -161,7 +160,7 @@ class Profiles:
             print("Wrong keys used")  # to do logging
             return None
 
-    def delete_color(self, path: Sequence[int], color: Sequence[int], profile: str):
+    def delete_color(self, path: List[int], color: List[int], profile: str):
         """
         deletes color given as a list of rgb components from path in profiledata dict
         :param path: path of keys
@@ -269,7 +268,7 @@ class Profiles:
         f.write(text)
 
     @staticmethod
-    def get_default_value(key_list: [str]) -> object:
+    def get_default_value(key_list: List[str]) -> OrderedDict[str, Any]:
         """
         get value from defaults using key path
         :param key_list: path of keys
@@ -281,7 +280,7 @@ class Profiles:
         return temp_data
 
     @staticmethod
-    def check_section(new_data: dict, check_function: callable, param: str, required: bool, default: dict) \
+    def check_section(new_data: dict, check_function: Callable, param: str, required: bool, default: dict) \
             -> Tuple[str, dict]:
         """
         checks section of loaded from text data
@@ -331,9 +330,9 @@ class Profiles:
         for key in checker.blade2_connection.keys():
             real_top_key = checker.get_key(new_data[blade2_key], key)
             for secondlevel_key in checker.connection[key]:
-                real_key = checker.get_key(new_data[motion_key][real_top_key], secondlevel_key)
+                real_key = checker.get_key(new_data[blade2_key][real_top_key], secondlevel_key)
                 if not real_key:
-                    new_data[motion_key][real_top_key][secondlevel_key] = defaults['Motion'][key][secondlevel_key]
+                    new_data[blade2_key][real_top_key][secondlevel_key] = default_profile[blade2_key][key][secondlevel_key]
         return new_data
 
     @staticmethod

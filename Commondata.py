@@ -1,11 +1,11 @@
 import pprint
-from typing import Tuple
+from typing import Tuple, Any, Callable, List, Dict
 
 import IniToJson
 import sys
 import CommonChecker
 
-defaults = {'Blade': {'BandNumber': 3, 'PixPerBand': 144, 'StartFlashFrom': 15},
+defaults: Dict[str, Any] = {'Blade': {'BandNumber': 3, 'PixPerBand': 144, 'StartFlashFrom': 15},
             'Blade2': {'Enabled': 0, 'BandNumber': 1, 'PixPerBand': 25, 'StartFlashFrom': 8},
             'Volume': {'Common': 100, 'CoarseLow': 50, 'CoarseMid': 93, 'CoarseHigh': 100},
             'PowerOffTimeout': 10,
@@ -51,7 +51,7 @@ class CommonData:
                                    'Percent': 90},
                           'Screw': {'Enabled': 0, 'LowW': 5, 'HighW': 200}}}
 
-    def update_value(self, key_list: [str], value):
+    def update_value(self, key_list: List[str], value: Any):
         """
         saves value to data dict to key found by path of keys
         :param key_list: path of keys
@@ -74,7 +74,7 @@ class CommonData:
         f = open(filename, "w", encoding='utf-8')
         f.write(text)
 
-    def get_default_value(self, key_list: [str]) -> object:
+    def get_default_value(self, key_list: List[str]) -> Dict[str, Any]:
         """
         get value from defaults using key path
         :param key_list: path of keys
@@ -85,7 +85,7 @@ class CommonData:
             temp_data = temp_data[key]
         return temp_data
 
-    def check_section(self, new_data: dict, check_function: callable, param: str, required: bool, default: dict)\
+    def check_section(self, new_data: dict, check_function: Callable, param: str, required: bool, default: Dict[str, Any])\
             -> Tuple[str, dict]:
         """
         checks section of loaded from text data
@@ -141,7 +141,7 @@ class CommonData:
 
     def load_data_from_text(self, text: str):
         new_data, error = IniToJson.get_json(text)
-        if error:
+        if error or new_data is None:
             return None, error, ""
         checker = CommonChecker.CommonChecker()
         try:
@@ -163,7 +163,7 @@ class CommonData:
             warning += w
             w, new_data = self.check_section(new_data, checker.check_top_number, 'PowerOffTimeout', True, defaults)
             warning += w
-            motion = checker.get_key(new_data, 'Motion')
+            motion: str = checker.get_key(new_data, 'Motion')
             w, wrong_keys = checker.motion_check_keys(new_data[motion])
             for key in wrong_keys:
                 new_data[motion].pop(key)

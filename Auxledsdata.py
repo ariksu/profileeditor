@@ -1,4 +1,4 @@
-from pprint import pformat
+import pprint
 import json
 from typing import Tuple, Optional, List, Sequence, Union, Dict, Any
 
@@ -40,7 +40,9 @@ class AuxEffects:
         elif datatype == 'Sequencer':
             return data.Name.lower() not in self.get_seq_names()
         else:
-            return data.Name.lower() not in seq.get_steps_names()
+            if seq is not None:
+                return data.Name.lower() not in seq.get_steps_names()
+        return False
 
     def get_seq_by_name(self, name: str) -> Optional['Sequencer']:
         """
@@ -87,11 +89,11 @@ class AuxEffects:
         :param description:
         :return:
         """
-        name = LedGroup.get_name(description)
+        name: str = LedGroup.get_name(description)
         for seq in self.Sequencers:
             if seq.Group.lower() == name.lower():
                 return None
-        group_for_delete = self.get_group_by_name(name)
+        group_for_delete: Optional[LedGroup] = self.get_group_by_name(name)
         if group_for_delete:
             self.LedGroups.remove(group_for_delete)
             return group_for_delete.Leds
@@ -106,12 +108,12 @@ class AuxEffects:
         """
         if not name:
             return None, "No Sequencer name"
-        group_name: str = LedGroup.get_name(group_name)
-        new_seq: Sequencer = Sequencer(name, group_name, [])
-        verified_seq = Sequencer.verify_sequencer(new_seq)
+        group_name = LedGroup.get_name(group_name)
+        new_seq: Optional[Sequencer] = Sequencer(name, group_name, [])
+        verified_seq: Optional[Sequencer] = Sequencer.verify_sequencer(new_seq)
         if not verified_seq:
             return None, "Wrong symbols in Sequencer name (only letters, digits and _ available"
-        is_unique = AuxEffects.check_unique(self, verified_seq, "Sequencer", None)
+        is_unique: bool = AuxEffects.check_unique(self, verified_seq, "Sequencer", None)
         if not is_unique:
             return None, "This Sequencer name is already used"
         self.Sequencers.append(verified_seq)
@@ -124,7 +126,7 @@ class AuxEffects:
         :return:
         """
         seq_name: str = Sequencer.get_name(name)
-        seq_to_delete = self.get_seq_by_name(seq_name)
+        seq_to_delete: Optional[Sequencer] = self.get_seq_by_name(seq_name)
         if seq_to_delete:
             self.Sequencers.remove(seq_to_delete)
         else:
@@ -137,12 +139,12 @@ class AuxEffects:
         :return: list of led names
         """
         seq_name: str = Sequencer.get_name(name)
-        group = None
+        group_name: str = ""
         for seq in self.Sequencers:
             if seq.Name.lower() == seq_name.lower():
-                group = seq.Group
-        if group:
-            group = self.get_group_by_name(group)
+                group_name = seq.Group
+        if group_name != "":
+            group: Optional['LedGroup'] = self.get_group_by_name(group_name)
             if group:
                 return list(map(str, group.Leds))
         return None
@@ -157,19 +159,20 @@ class AuxEffects:
             leds.extend(group.Leds)
         return [str(led) for led in leds]
 
-    def change_leds(self, led1: int, led2: int):
+    def change_leds(self, led1: str, led2: str):
         """
         finds and exchanges two leds
         :param led1: first led
         :param led2: second led
         :return:
         """
-        first, second = None, None
+        first: Optional['LedGroup'] = None
+        second: Optional['LedGroup'] = None
         for group in self.LedGroups:
             if led1 in group.Leds:
-                first: 'LedGroup' = group
+                first = group
             if led2 in group.Leds:
-                second: 'LedGroup' = group
+                second = group
         if first is None:
             return "Led %s not found" % led1
         if second is None:
@@ -187,17 +190,17 @@ class AuxEffects:
         :param new: new group name
         :return: new group or none, error message
         """
-        old_name = LedGroup.get_name(old)
-        group: 'LedGroup' = self.get_group_by_name(old_name)
+        old_name: str = LedGroup.get_name(old)
+        group: Optional['LedGroup'] = self.get_group_by_name(old_name)
         if group is None:
             return None, "Group %s is not found" % old_name
         if new == "":
             return None, "Group name must not be empty"
-        unique = not (new in self.get_group_list())
+        unique: bool = not (new in self.get_group_list())
         if not unique:
             return None, "This group name is already used"
         group.Name = new
-        check = LedGroup.verify_led_group(group)
+        check: Optional[LedGroup] = LedGroup.verify_led_group(group)
         if check is None:
             group.Name = old_name
             return None, "Wrong symbols in LED group name (only letters, digits and _ available"
@@ -205,6 +208,23 @@ class AuxEffects:
             if seq.Group.lower() == old_name.lower():
                 seq.Group = new
         return group, ""
+
+    def get_corresponding_seqs(self, group_name)->List[str]:
+        """
+        returns list of sequencers with same number of leds as group with current name
+        :param group_name: current group name
+        :return: list of seqs
+        """
+        group: Optional['LedGroup'] = self.get_group_by_name(group_name)
+        if not group:
+            return list()
+        count: int = len(group.Leds)
+        result = list()
+        for seq in self.Sequencers:
+            group = self.get_group_by_name(seq.Group)
+            if group and len(group.Leds) == count:
+                result.append(seq.Name)
+        return result
 
 
     def create_step(self, seq_descr: str, step_id: int, name: str, brigthnesses: List[Union[str, int]], smooth: int,
@@ -221,11 +241,13 @@ class AuxEffects:
         """
         seq_name: str = Sequencer.get_name(seq_descr)
         new_step: Step = Step(Name=name, Brightness=brigthnesses, Wait=wait, Smooth=smooth)
-        verified_step = Step.verify_step(new_step)
+        verified_step: Optional[Step] = Step.verify_step(new_step)
         if not verified_step:
             return None, "Wrong symbols in Step name (only letters, digits and _ available"
-        current_seq = self.get_seq_by_name(seq_name)
-        is_unique = AuxEffects.check_unique(self, verified_step, "Step", current_seq)
+        current_seq: Optional[Sequencer] = self.get_seq_by_name(seq_name)
+        if current_seq is None:
+            return None, "No such sequencer"
+        is_unique: bool = AuxEffects.check_unique(self, verified_step, "Step", current_seq)
         if not is_unique:
             return None, "This Step name is already used"
         if step_id == -1:
@@ -241,11 +263,12 @@ class AuxEffects:
         :param seq_descr: described sequencer
         :return:
         """
-        step_name = Step.get_name(step_descr)
-        seq = self.get_seq_by_name(Sequencer.get_name(seq_descr))
-        for step in seq.Sequence:
-            if isinstance(step, Step) and step.Name == step_name:
-                seq.Sequence.remove(step)
+        step_name: str = Step.get_name(step_descr)
+        seq: Optional[Sequencer] = self.get_seq_by_name(Sequencer.get_name(seq_descr))
+        if seq is not None:
+            for step in seq.Sequence:
+                if isinstance(step, Step) and step.Name == step_name:
+                    seq.Sequence.remove(step)
 
     def get_step_info(self, seq_descr: str, step_id: int) -> Optional[Tuple[List[Union[str, int]], int, int]]:
         """
@@ -254,8 +277,8 @@ class AuxEffects:
         :param step_id: step id
         :return: step brightnesses, wait and smooth
         """
-        seq_name = Sequencer.get_name(seq_descr)
-        seq = self.get_seq_by_name(seq_name)
+        seq_name: str = Sequencer.get_name(seq_descr)
+        seq: Optional[Sequencer] = self.get_seq_by_name(seq_name)
         if seq:
             return seq.get_step_brightness(step_id), seq.get_step_wait(step_id), seq.get_step_smooth(step_id)
         return None
@@ -272,10 +295,10 @@ class AuxEffects:
         :param smooth: new smooth
         :return: old step name
         """
-        seq_name = Sequencer.get_name(seq)
-        seq = self.get_seq_by_name(seq_name)
-        if seq:
-            return seq.update_step(step_id, name, brightnesses, wait, smooth)
+        seq_name: str = Sequencer.get_name(seq)
+        current_seq: Optional[Sequencer] = self.get_seq_by_name(seq_name)
+        if current_seq:
+            return current_seq.update_step(step_id, name, brightnesses, wait, smooth)
         return None, "", []
 
     def add_repeat(self, seq_descr: str, repeat_id: int, start_from: str, count: Union[int, str]) \
@@ -289,7 +312,9 @@ class AuxEffects:
         :return: step or None, error message or empty
         """
         seq_name: str = Sequencer.get_name(seq_descr)
-        seq: 'Sequencer' = self.get_seq_by_name(seq_name)
+        seq: Optional['Sequencer'] = self.get_seq_by_name(seq_name)
+        if seq is None:
+            return None, "No such sequencer"
         repeat, error = seq.create_repeat(repeat_id, start_from, count)
         return repeat, error
 
@@ -301,7 +326,9 @@ class AuxEffects:
         :return: error message or empty string
         """
         seq_name: str = Sequencer.get_name(seq_descr)
-        seq: 'Sequencer' = self.get_seq_by_name(seq_name)
+        seq: Optional['Sequencer'] = self.get_seq_by_name(seq_name)
+        if seq is None:
+            return "No such sequencer"
         error = seq.delete_repeat(repeat_id)
         return error
 
@@ -313,7 +340,9 @@ class AuxEffects:
         :return: name of start step and count or None
         """
         seq_name: str = Sequencer.get_name(seq_descr)
-        seq: 'Sequencer' = self.get_seq_by_name(seq_name)
+        seq: Optional['Sequencer'] = self.get_seq_by_name(seq_name)
+        if seq is None:
+            return None
         return seq.get_repeat_info(repeat_id)
 
     def update_repeat(self, seq_descr: str, repeat_id: int, new_start: str, new_count: Union[str, int]) \
@@ -327,7 +356,9 @@ class AuxEffects:
         :return: new repeat step or None and error message if any
         """
         seq_name: str = Sequencer.get_name(seq_descr)
-        seq: 'Sequencer' = self.get_seq_by_name(seq_name)
+        seq: Optional['Sequencer'] = self.get_seq_by_name(seq_name)
+        if seq is None:
+            return None, 'No such sequencer'
         return seq.update_repeat(repeat_id, new_start, new_count)
 
     def save_to_file(self, filename: str):
@@ -347,7 +378,8 @@ class AuxEffects:
                     step['Repeat']['Count'] = step['Count']
                     step.pop('StartingFrom')
                     step.pop('Count')
-        text = pformat(prepare, indent=0)
+        pprint.sorted = lambda x, key=None: x
+        text: str = pprint.pformat(prepare, indent=0)
         text = text.replace(r"'", "")
         text = text[1:-1]
         f = open(filename, "w", encoding='utf-8')
@@ -360,7 +392,7 @@ class AuxEffects:
         :param src_json: src to convert to dataclass
         :return:
         """
-        error = ""
+        error: str = ""
         if len(src_json.get("LedGroups", [])) == 0:
             error = "No or empty LedGroups"
         if len(src_json.get("Sequencers", [])) == 0:
@@ -375,7 +407,7 @@ class AuxEffects:
         :return: json as dict or None, error or empty string, warning or emptu string
         """
         new_data, error = IniToJson.get_json(text)
-        if error:
+        if error or new_data is None:
             return None, error, ""
         data, warning = data_load(new_data)
         return data, "", warning
@@ -462,20 +494,23 @@ class Sequencer:
         :return: start step name, count
         """
         if step_id < len(self.Sequence):
-            return self.Sequence[step_id].StartingFrom, self.Sequence[step_id].Count
+            step = self.Sequence[step_id]
+            if isinstance(step, Repeater):
+                return step.StartingFrom, step.Count
         return None
 
-    def get_max_step_number(self):
+    def get_max_step_number(self)->int:
         """
         get max used step number for steps with default name Step1...
+        :rtype: object
         :return: step number
         """
-        max_num = 0
+        max_num: int = 0
         for step in self.Sequence:
             if isinstance(step, Step) and 'step' in step.Name.lower() and step.Name.lower().index('step') == 0:
-                tail = step.Name.lower().replace('step', '')
+                tail: str = step.Name.lower().replace('step', '')
                 if tail.isdigit():
-                    num = int(tail)
+                    num: int = int(tail)
                     max_num = max(max_num, num)
         return max_num
 
@@ -503,7 +538,8 @@ class Sequencer:
         verified_repeat = self.verify_repeat(new_repeat)
         if not verified_repeat:
             return None, "Wrong start step"
-        if id == -1:
+        if repeat_id == -1:
+            self.Sequence.append(verified_repeat)
             self.Sequence.append(verified_repeat)
         else:
             self.Sequence.insert(repeat_id + 1, verified_repeat)
@@ -527,7 +563,10 @@ class Sequencer:
         :param step_id: number of step
         :return: list of step brightnesses
         """
-        return self.Sequence[step_id].Brightness
+        step = self.Sequence[step_id]
+        if isinstance(step, Step):
+            return step.Brightness
+        return list()
 
     def get_step_smooth(self, step_id: int) -> int:
         """
@@ -535,7 +574,10 @@ class Sequencer:
         :param step_id: number of step
         :return: smooth
         """
-        return self.Sequence[step_id].Smooth
+        step = self.Sequence[step_id]
+        if isinstance(step, Step):
+            return step.Smooth
+        return 0
 
     def get_step_wait(self, step_id: int) -> int:
         """
@@ -543,10 +585,13 @@ class Sequencer:
         :param step_id: number of step
         :return: wait
         """
-        return self.Sequence[step_id].Wait
+        step = self.Sequence[step_id]
+        if isinstance(step, Step):
+            return step.Wait
+        return 0
 
     def update_step(self, step_id: int, name: str, brightnesses: List[Union[str, int]], wait: int, smooth: int) -> \
-            Tuple['Step', str, List[int]]:
+            Tuple[Optional['Step'], str, List[int]]:
         """
         updates step with new data
         :param step_id: step_id
@@ -556,18 +601,21 @@ class Sequencer:
         :param smooth: new smooth
         :return: new step, old step name, repeat step affected
         """
-        self.Sequence[step_id].Brightness = brightnesses
-        self.Sequence[step_id].Wait = wait
-        self.Sequence[step_id].Smooth = smooth
-        old_name = self.Sequence[step_id].Name
-        self.Sequence[step_id].Name = name
-        changed = list()
-        for i in range(len(self.Sequence)):
-            repeat = self.Sequence[i]
-            if isinstance(repeat, Repeater) and repeat.StartingFrom == old_name:
-                repeat.StartingFrom = name
-                changed.append(i)
-        return self.Sequence[step_id], old_name, changed
+        step = self.Sequence[step_id]
+        if isinstance(step, Step):
+            step.Brightness = brightnesses
+            step.Wait = wait
+            step.Smooth = smooth
+            old_name = step.Name
+            step.Name = name
+            changed = list()
+            for i in range(len(self.Sequence)):
+                repeat = self.Sequence[i]
+                if isinstance(repeat, Repeater) and repeat.StartingFrom == old_name:
+                    repeat.StartingFrom = name
+                    changed.append(i)
+            return step, old_name, changed
+        return None, "", list()
 
     def update_repeat(self, step_id: int, start_from: str, count: Union[str, int]) -> Tuple[Optional['Repeater'], str]:
         """
@@ -577,10 +625,11 @@ class Sequencer:
         :param count: new count
         :return: new repeat step or None, error message if any
         """
-        if step_id < len(self.Sequence):
-            self.Sequence[step_id].StartingFrom = start_from
-            self.Sequence[step_id].Count = count
-            return self.Sequence[step_id], ""
+        step = self.Sequence[step_id]
+        if step_id < len(self.Sequence) and isinstance(step, Repeater):
+            step.StartingFrom = start_from
+            step.Count = count
+            return step, ""
         return None, "No such step"
 
     @staticmethod
@@ -717,6 +766,7 @@ def data_load(json_data: Dict) -> Tuple[AuxEffects, str]:
     for led in json_data.get("LedGroups", []):
         try:
             ledgroup = LedGroup(**led)
+            ledgroup.Name = str(ledgroup.Name)
             ledgroup.Leds = [str(led) for led in ledgroup.Leds]
             auxleds.LedGroups.append(ledgroup)
             LedGroup.verify_length(led)
@@ -725,7 +775,7 @@ def data_load(json_data: Dict) -> Tuple[AuxEffects, str]:
     for sequencer in json_data.get("Sequencers", []):
         try:
             name, group, sequence = sequencer.values()
-            auxleds.Sequencers.append(Sequencer(Name=name, Group=group))
+            auxleds.Sequencers.append(Sequencer(Name=str(name), Group=str(group)))
         except Exception:
             warning += Sequencer.creation_error(sequencer, sys.exc_info()[1].args[0])
 
@@ -733,12 +783,16 @@ def data_load(json_data: Dict) -> Tuple[AuxEffects, str]:
             current_sequence = auxleds.Sequencers[-1].Sequence
             if "Repeat" not in step:
                 try:
-                    current_sequence.append(Step(**step))
+                    new_step = Step(**step)
+                    new_step.Name = str(new_step.Name)
+                    current_sequence.append(new_step)
                 except Exception:
                     warning += Step.creation_error(step, sys.exc_info()[1].args[0])
             else:
                 try:
-                    current_sequence.append(Repeater(**step['Repeat']))
+                    new_repeat = Repeater(**step['Repeat'])
+                    new_repeat.StartingFrom = str(new_repeat.StartingFrom)
+                    current_sequence.append(new_repeat)
                 except Exception:
                     warning += Repeater.creation_error(step, sys.exc_info()[1].args[0])
             auxleds.Sequencers[-1].remove_duplicates()

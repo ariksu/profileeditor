@@ -1,7 +1,7 @@
 import re
 import json
 import sys
-from typing import Tuple
+from typing import Tuple, Dict, Any, Optional
 
 
 def remove_comments(text: str) -> Tuple[str, int]:
@@ -53,7 +53,7 @@ def prepare_text_for_json(text: str) -> str:
     return text
 
 
-def get_json(text: str) -> (dict, str):
+def get_json(text: str) -> Tuple[Optional[Dict[Any, Any]], str]:
     """
     funtions converts prepared text to json if possible
     :param text: ini file text

@@ -130,14 +130,14 @@ def get_currrent_step_name(name: str) -> str:
     return step_name
 
 
-def get_param_from_repeat(name: str) -> Tuple[str, str]:
+def get_param_from_repeat(name: str) -> Tuple[str, Union[str, int]]:
     """
     gets startstep and count from step name
     :param name: step name
     :return: start step, count
     """
     start_step = name.split(', ')[0].split(": ")[2]
-    count = name.split(', ')[1].split(": ")[1]
+    count: Union[str, int] = name.split(', ')[1].split(": ")[1]
     if count != 'forever':
         count = int(count)
     return start_step, count
@@ -160,7 +160,7 @@ def get_param_from_name(name: str) -> Tuple[str, list, int, int]:
     return step_name, brightness, wait, smooth
 
 
-def translate_json_to_tree_structure(data_src: str) -> Tuple[Optional[dict], Optional[str], str]:
+def translate_json_to_tree_structure(data_src: str) -> Tuple[Optional[Auxledsdata.AuxEffects], str, str]:
     """
     translate data from file to tree view
     :param data_src: dict with data
@@ -197,15 +197,14 @@ def color_data_to_str(color: Union[Sequence[int], str]) -> str:
     :param color: rgb list [0, 255, 0]
     :return: strint ("0, 255, 0"
     """
-    if color != 'random':
-        value = list(map(str, color))
-        text = ', '.join(value)
-    else:
-        text = color
+    if isinstance(color, str) and color == 'random':
+        return color
+    value = list(map(str, color))
+    text: str = ', '.join(value)
     return text
 
 
-def str_to_color_data(color: str) -> Sequence[int]:
+def str_to_color_data(color: str) -> Union[Sequence[int], str]:
     """
     parces str to list with rgb components
     :param color: str "0, 255, 0"
