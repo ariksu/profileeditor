@@ -12,12 +12,24 @@ import functools
 
 T = TypeVar("T")
 T1 = TypeVar("T1")
+warnings = ""
+
+
+def dummylogger(*args: Any) -> str:
+    return ""
 
 
 def from_list(f: Callable[..., T]) -> Callable[..., List[T]]:
-    def _from_list(f: Callable[..., T], x: Any) -> List[T]:
+    def _from_list(f: Callable[..., T], x: Any, err_callback=dummylogger) -> List[T]:
+        import sys
         if isinstance(x, list):
-            return [f(y) for y in x]
+            global warnings
+            parsedlist: List[T] = []
+            for item in x:
+                try:
+                    parsedlist.append(f(item))
+                except Exception as e:
+                    warnings += err_callback(item, sys.exc_info()[1].args[0])
         raise ValueError(f"{x} is not instance of list")
 
     return functools.partial(_from_list, f)
@@ -37,7 +49,7 @@ def from_str(x: Any) -> str:
 
 def union(f1: Callable[..., T], f2: Callable[..., T1]) -> Callable[..., Union[T, T1]]:
     def _from_union(f1: Callable[..., T], f2: Callable[..., T1], x: Any) -> Union[T, T1]:
-        fs: List[Callable[..., Union[T, T1]]] = [f1,f2]
+        fs: List[Callable[..., Union[T, T1]]] = [f1, f2]
         for f in fs:
             try:
                 r = f(x)
@@ -87,17 +99,17 @@ class LEDGroup:
     name: str
 
     @staticmethod
-    def from_dict(obj: dict) -> 'LEDGroup':
+    def parse(obj: dict) -> 'LEDGroup':
         assert isinstance(obj, dict)
         leds = from_list(from_int)(obj.get("Leds"))
         name = from_str(obj.get("Name"))
         return LEDGroup(leds, name)
 
-    def to_dict(self) -> dict:
-        result: dict = {}
-        result["Leds"] = from_list(from_int)(self.leds)
-        result["Name"] = from_str(self.name)
-        return result
+    # def to_dict(self) -> dict:
+    #     result: dict = {}
+    #     result["Leds"] = from_list(from_int)(self.leds)
+    #     result["Name"] = from_str(self.name)
+    #     return result
 
 
 @dataclass
@@ -106,7 +118,7 @@ class Repeater:
     StartingFrom: str
 
     @staticmethod
-    def from_dict(obj: Any) -> 'Repeater':
+    def parse(obj: Any) -> 'Repeater':
         assert isinstance(obj, dict)
         count = from_str(obj["Repeat"].get("Count"))
         starting_from = from_str(obj["Repeat"].get("StartingFrom"))
@@ -127,7 +139,7 @@ class Step:
     Wait: int = 0
 
     @staticmethod
-    def from_dict(obj: Any) -> 'Step':
+    def parse(obj: Any) -> 'Step':
         if not isinstance(obj, dict):
             raise ValueError(f"{obj} is not a dict")
         # if "Repeat" in obj:
@@ -138,13 +150,13 @@ class Step:
         wait = zeroable(from_int)(obj.get("Wait"))
         return Step(brightness, name, smooth, wait)
 
-    def to_dict(self) -> dict:
-        result: dict = {}
-        result["Brightness"] = from_list(zeroable(union(from_int, from_str)))(self.Brightness)
-        result["Name"] = stringable(from_str)(self.Name)
-        result["Smooth"] = zeroable(from_int)(self.Smooth)
-        result["Wait"] = zeroable(from_int)(self.Wait)
-        return result
+    # def to_dict(self) -> dict:
+    #     result: dict = {}
+    #     result["Brightness"] = from_list(zeroable(union(from_int, from_str)))(self.Brightness)
+    #     result["Name"] = stringable(from_str)(self.Name)
+    #     result["Smooth"] = zeroable(from_int)(self.Smooth)
+    #     result["Wait"] = zeroable(from_int)(self.Wait)
+    #     return result
 
 
 @dataclass
@@ -154,19 +166,19 @@ class Sequencer:
     Sequence: List[Union[Step, Repeater]]
 
     @staticmethod
-    def from_dict(obj: Any) -> 'Sequencer':
+    def parse(obj: Any) -> 'Sequencer':
         assert isinstance(obj, dict)
         group = from_str(obj.get("Group"))
         name = from_str(obj.get("Name"))
-        sequence = from_list(union(Step.from_dict, Repeater.from_dict))(obj.get("Sequence"))
+        sequence = from_list(union(Step.parse, Repeater.parse))(obj.get("Sequence"))
         return Sequencer(group, name, sequence)
 
-    def to_dict(self) -> dict:
-        result: dict = {}
-        result["Group"] = from_str(self.Group)
-        result["Name"] = from_str(self.Name)
-        result["Sequence"] = from_list(union(Step.to_dict, Repeater.to_dict))(self.Sequence)
-        return result
+    # def to_dict(self) -> dict:
+    #     result: dict = {}
+    #     result["Group"] = from_str(self.Group)
+    #     result["Name"] = from_str(self.Name)
+    #     result["Sequence"] = from_list(union(Step.to_dict, Repeater.to_dict))(self.Sequence)
+    #     return result
 
 
 @dataclass
@@ -175,28 +187,27 @@ class AuxEffects:
     Sequencers: List[Sequencer]
 
     @staticmethod
-    def from_dict(obj: Any) -> 'AuxEffects':
+    def parse(obj: Any) -> 'AuxEffects':
         assert isinstance(obj, dict)
         # led_groups = None
-        led_groups = from_list(LEDGroup.from_dict)(obj.get("LedGroups"))
-        sequencers = from_list(Sequencer.from_dict)(obj.get("Sequencers"))
+        led_groups = from_list(LEDGroup.parse)(obj.get("LedGroups"))
+        sequencers = from_list(Sequencer.parse)(obj.get("Sequencers"))
         return AuxEffects(led_groups, sequencers)
 
-    def to_dict(self) -> dict:
-        """
-        This is serialization of object. No typing provided for returned dictionary.
-        For use *STRICTLY* on jsoning.
-        :return:
-        """
-        result: dict = {}
-        result["LedGroups"] = from_list(lambda x: to_class(LEDGroup, x))(self.LedGroups)
-        result["Sequencers"] = from_list(lambda x: to_class(Sequencer, x))(self.Sequencers)
-        return result
+    # def to_dict(self) -> dict:
+    #     """
+    #     This is serialization of object. No typing provided for returned dictionary.
+    #     For use *STRICTLY* on jsoning.
+    #     :return:
+    #     """
+    #     result: dict = {}
+    #     result["LedGroups"] = from_list(lambda x: to_class(LEDGroup, x))(self.LedGroups)
+    #     result["Sequencers"] = from_list(lambda x: to_class(Sequencer, x))(self.Sequencers)
+    #     return result
 
 
 def auxeffects_from_dict(s: Any) -> AuxEffects:
-    return AuxEffects.from_dict(s)
-
-
-def coordinate_to_dict(x: AuxEffects) -> Any:
-    return to_class(AuxEffects, x)
+    global warnings
+    warnings = ""
+    parsed = AuxEffects.parse(s)
+    return parsed, warnings

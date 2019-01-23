@@ -31,7 +31,7 @@ def prepare_text_for_json(text: str) -> str:
 
 from quicktype import AuxEffects
 with open('correct.json') as j:
-    x = AuxEffects.from_dict(json.load(j))
+    x = AuxEffects.parse(json.load(j))
     from pprint import pprint
 
     # set breakpoint on pprint below to view loaded object in debugger
@@ -44,7 +44,7 @@ with open('correct.json') as j:
 
 with open("incorrect.json") as j2:
     try:
-        x2 = AuxEffects.from_dict(json.load(j2))
+        x2 = AuxEffects.parse(json.load(j2))
     except Exception as e:
         print("failed to load incorrect json")
         print(e)
