@@ -158,7 +158,7 @@ class ProfileChecker:
         warning = self.check_auxleds(flickering)
         return error, warning
 
-    def check_movement(self, data: Dict[Any], leds_number: int, key: str) -> Tuple[str, str]:
+    def check_movement(self, data: Dict[str, Any], leds_number: int, key: str) -> Tuple[str, str]:
         """
         checks if blaster/clash/stab effect is correct
         :param data: dict with settings

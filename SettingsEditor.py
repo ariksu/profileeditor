@@ -1282,11 +1282,11 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         :return:
         """
         profile = item.text()
-        print(profile)
+        # print(profile)
         self.CBBlade.setCurrentIndex(0)
         self.LoadProfileControls(profile)
         i = self.LstProfile.currentRow()
-        print(i)
+        # print(i)
         enabled = True if i > 0 else False
         self.BtnUp.setEnabled(enabled)
         enabled = True if (i < self.LstProfile.count() - 1) else False
@@ -1410,12 +1410,12 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         color_widget.setAutoFillBackground(True)
         if label != 'random':
             try:
-                color = QtGui.QColor(label[0], label[1], label[2])
+                rgb_shifted = ",".join(str(color) for color in palitra.ColorDialog.getColornoWindow(text.text())[0][1])
+                color_widget.setStyleSheet("QWidget { background-color: rgba(%s); }" % rgb_shifted)
             except IndexError:
-                color = QtGui.QColor(215, 215, 215)
+                color_widget.setStyleSheet("QWidget { background-color: %s }") % 'gray'
         else:
-            color = QtGui.QColor(215, 215, 215)
-        color_widget.setStyleSheet("QWidget { background-color: %s }" % color.name())
+            color_widget.setStyleSheet("QWidget { background-color: %s }" % 'gray')
 
     def ProfileEditPressed(self):
         """
@@ -1437,7 +1437,7 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         """
         color_button = self.sender()
         color_input = self.color_dict[color_button]
-        color_data = palitra.ColorDialog.getColor()
+        color_data = palitra.ColorDialog.getColor(color_input.text())
         if color_data[1]:
             color_input.setText(color_data[0][0])
             color_widget = self.selected_color_dict[color_input]
@@ -1457,7 +1457,7 @@ class ProfileEditor(QtWidgets.QMainWindow, design.Ui_MainWindow):
         adds color to flaming color list and saves color data to profile
         :return:
         """
-        color_data = palitra.ColorDialog.getColor()
+        color_data = palitra.ColorDialog.getColor("255, 0, 0")
         if color_data[1]:
             self.LstFlamingColor.addItem(color_data[0][0])
             # save to profile adding Blade2 key if Blade2 selected

@@ -1,10 +1,10 @@
-from typing import Sequence, Tuple, Optional, Any, List, Callable
+from typing import Sequence, Tuple, Optional, Any, List, Callable, Dict
 import pprint
 import IniToJson
 import profilechecker
 from collections import OrderedDict
 
-default_profile: OrderedDict[str, Any] = OrderedDict({'AfterWake': {},
+default_profile = OrderedDict({'AfterWake': {},
                    'PowerOn': {'Blade': {'Speed': 144}},
                    'WorkingMode': {'Color': [0, 255, 0], 'Flaming': 0, 'FlickeringAlways': 1},
                    'PowerOff': {'Blade': {'Speed': 144, 'MoveForward': 0}},
@@ -89,7 +89,7 @@ class Profiles:
         self.data.pop(name)
         self.order.remove(name)
 
-    def get_default(self, path: List[str]) -> OrderedDict[str, Any]:
+    def get_default(self, path: List[str]) -> Dict[str, Any]:
         """
         gets default value for key path
         :param path: pat of keys
@@ -100,7 +100,7 @@ class Profiles:
             data = data[key]
         return data
 
-    def get_value(self, path: List[str], profile: str) -> OrderedDict[str, Any]:
+    def get_value(self, path: List[str], profile: str) -> Dict[str, Any]:
         """
         gets value of field configured with pat for profile
         :param path: path of keys
@@ -268,7 +268,7 @@ class Profiles:
         f.write(text)
 
     @staticmethod
-    def get_default_value(key_list: List[str]) -> OrderedDict[str, Any]:
+    def get_default_value(key_list: List[str]) -> Dict[str, Any]:
         """
         get value from defaults using key path
         :param key_list: path of keys
