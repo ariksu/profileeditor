@@ -11,10 +11,11 @@ from typing import List, Any, Optional, Union, TypeVar, Callable, Type, cast
 import functools
 
 T = TypeVar("T")
+T1 = TypeVar("T1")
 
 
-def from_list(f: Callable[[Any], T]) -> Callable[[Any], List[T]]:
-    def _from_list(f: Callable[[Any], T], x: Any) -> List[T]:
+def from_list(f: Callable[..., T]) -> Callable[..., List[T]]:
+    def _from_list(f: Callable[..., T], x: Any) -> List[T]:
         if isinstance(x, list):
             return [f(y) for y in x]
         raise ValueError(f"{x} is not instance of list")
@@ -34,37 +35,30 @@ def from_str(x: Any) -> str:
     raise ValueError(f"{x} is not instance of str")
 
 
-def union(fs: List[Callable[[Any], T]]) -> Callable[[Any], T]:
-    def _from_union(fs: List[Callable[[Any], T]], x: Any) -> T:
+def union(f1: Callable[..., T], f2: Callable[..., T1]) -> Callable[..., Union[T, T1]]:
+    def _from_union(f1: Callable[..., T], f2: Callable[..., T1], x: Any) -> Union[T, T1]:
+        fs: List[Callable[..., Union[T, T1]]] = [f1,f2]
         for f in fs:
             try:
-                return f(x)
+                r = f(x)
+                return r
             except:
                 pass
-        raise ValueError(f"{x} cannot be parsed by any {[str(f.__qualname__) for f in fs]}")
+        raise ValueError(f"{x} cannot be parsed by any {[str(f.__qualname__) for f in [f1, f2]]}")
 
-    return functools.partial(_from_union, fs)
-
-
-def optional(f: Callable[[Any],T]):
-    params = list()
-    params.append(f)
-    params.append(from_none)
-    return union(params)
+    return functools.partial(_from_union, f1, f2)
 
 
-def zeroable(f: Callable[[Any],T]):
-    params = list()
-    params.append(f)
-    params.append(zero)
-    return union(params)
+def optional(f: Callable[..., T]):
+    return union(f, from_none)
 
 
-def stringable(f: Callable[[Any],T]):
-    params = list()
-    params.append(f)
-    params.append(empty_string)
-    return union(params)
+def zeroable(f: Callable[..., T]):
+    return union(f, zero)
+
+
+def stringable(f: Callable[..., T]):
+    return union(f, empty_string)
 
 
 def from_none(x: Any) -> None:
@@ -128,9 +122,9 @@ class Repeater:
 @dataclass
 class Step:
     Brightness: List[Union[int, str]]
-    Name: str=""
-    Smooth: int=0
-    Wait: int=0
+    Name: str = ""
+    Smooth: int = 0
+    Wait: int = 0
 
     @staticmethod
     def from_dict(obj: Any) -> 'Step':
@@ -138,7 +132,7 @@ class Step:
             raise ValueError(f"{obj} is not a dict")
         # if "Repeat" in obj:
         #     raise ValueError(f"{obj} is a Repeater")
-        brightness = from_list(zeroable(union([from_int, from_str])))(obj.get("Brightness"))
+        brightness = from_list(zeroable(union(from_int, from_str)))(obj.get("Brightness"))
         name = stringable(from_str)(obj.get("Name"))
         smooth = zeroable(from_int)(obj.get("Smooth"))
         wait = zeroable(from_int)(obj.get("Wait"))
@@ -146,7 +140,7 @@ class Step:
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["Brightness"] = from_list(zeroable(union([from_int, from_str])))(self.Brightness)
+        result["Brightness"] = from_list(zeroable(union(from_int, from_str)))(self.Brightness)
         result["Name"] = stringable(from_str)(self.Name)
         result["Smooth"] = zeroable(from_int)(self.Smooth)
         result["Wait"] = zeroable(from_int)(self.Wait)
@@ -164,14 +158,14 @@ class Sequencer:
         assert isinstance(obj, dict)
         group = from_str(obj.get("Group"))
         name = from_str(obj.get("Name"))
-        sequence = from_list(union([Step.from_dict, Repeater.from_dict]))(obj.get("Sequence"))
+        sequence = from_list(union(Step.from_dict, Repeater.from_dict))(obj.get("Sequence"))
         return Sequencer(group, name, sequence)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["Group"] = from_str(self.Group)
         result["Name"] = from_str(self.Name)
-        result["Sequence"] = from_list(union([Step.to_dict, Repeater.to_dict]))(self.Sequence)
+        result["Sequence"] = from_list(union(Step.to_dict, Repeater.to_dict))(self.Sequence)
         return result
 
 
